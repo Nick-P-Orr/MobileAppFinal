@@ -3,7 +3,7 @@ package com.example.notely;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Subject extends AppCompatActivity {
+public class Categories extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
