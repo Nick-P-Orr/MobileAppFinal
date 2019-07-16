@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
+    private static final String TAG = "MyActivity";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,17 +46,21 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String date = df.format(Calendar.getInstance().getTime());
+        DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+        final String date = df.format(Calendar.getInstance().getTime());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
 
         Button save_btn = (Button)findViewById(R.id.save_note);
+
+        ((TextView)findViewById(R.id.current_date)).setText(date);
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -74,8 +80,11 @@ public class MainActivity extends AppCompatActivity {
                 String completion_date = ((EditText)findViewById(R.id.completion_field)).getText().toString();
 
 
+
+
                 intent.setClass(MainActivity.this, MainActivity.class);
 
+                Log.v("myApp", "Save Note button is clicked");
 
 
             }
