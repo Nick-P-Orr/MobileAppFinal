@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 String note_field = ((EditText)findViewById(R.id.note_field)).getText().toString();
-                String category_field = ((TextView)findViewById(R.id.category_field)).getText().toString();
-                String date_field = ((TextView)findViewById(R.id.current_date)).getText().toString();
-                String title_field = ((TextView)findViewById(R.id.title_field)).getText().toString();
+                String category_field = ((EditText)findViewById(R.id.category_field)).getText().toString();
+                String date_field = ((EditText)findViewById(R.id.current_date)).getText().toString();
+                String title_field = ((EditText)findViewById(R.id.title_field)).getText().toString();
                 String completion_date = ((EditText)findViewById(R.id.completion_field)).getText().toString();
 
 
