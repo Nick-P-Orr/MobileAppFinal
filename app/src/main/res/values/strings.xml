@@ -5,4 +5,9 @@
     <string name="title_takeNote">New Note</string>
     <string name="title_settings">Settings</string>
     <string name="title_search">Search</string>
+
+    <string name="note_title">Note Title</string>
+    <string name="category">Category</string>
+    <string name="completion_date">Completion Date</string>
+    <string name="written_date">Written Date</string>
 </resources>

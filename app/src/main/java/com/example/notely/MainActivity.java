@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText mEditText;
+    EditText noteEditText;
 
     private TextView mTextMessage;
 
@@ -37,13 +37,15 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView dateText;
 
-    private EditText endDate;
+    private TextView endDate;
 
     DatePickerDialog picker;
 
     Date date = Calendar.getInstance().getTime();
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy");
+    SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+    SimpleDateFormat printDateFormat = new SimpleDateFormat("MM_dd_yyyy");
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,15 +78,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEditText = findViewById(R.id.noteText);
+        noteEditText = findViewById(R.id.note_field);
 
-        titleEditText = findViewById(R.id.title_text);
+        titleEditText = findViewById(R.id.title_field);
 
-        dateText = findViewById(R.id.dateView);
+        dateText = findViewById(R.id.current_date);
 
-        endDate = findViewById(R.id.compDate);
+        endDate = findViewById(R.id.completion_field);
 
-        String formattedDate = dateFormat.format(date);
+        endDate.setShowSoftInputOnFocus(false);
+
+        String formattedDate = displayDateFormat.format(date);
 
         dateText.setText(formattedDate);
 
@@ -106,11 +110,9 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        Button search = findViewById(R.id.button2);
+        //Button search = findViewById(R.id.button2);
 
-        Button save = findViewById(R.id.save_button);
-
-        endDate.setShowSoftInputOnFocus(false);
+        Button save = findViewById(R.id.save_note);
 
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        search.setOnClickListener(new View.OnClickListener() {
+/*        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchActivity();
             }
 
-        });
+        });*/
 
     }
 
@@ -168,18 +170,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String formattedDate = dateFormat.format(date);
+        String formattedDate = printDateFormat.format(date);
 
         FILE_NAME = FILE_NAME + "_" + formattedDate;
 
-        String text = mEditText.getText().toString();
+        String text = noteEditText.getText().toString();
         FileOutputStream outStream = null;
 
         try {
             outStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
             outStream.write(text.getBytes());
 
-            mEditText.getText().clear();
+            noteEditText.getText().clear();
             Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
                     Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
