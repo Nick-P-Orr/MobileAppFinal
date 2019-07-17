@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-    SimpleDateFormat printDateFormat = new SimpleDateFormat("MM_dd_yyyy");
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -78,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set the path and database name
+        String path = "/data/data/" + getPackageName() + "/sample.db";
+
+        // Open the database. If it doesn't exist, create it.
+        SQLiteDatabase db;
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+
         noteEditText = findViewById(R.id.note_field);
 
         titleEditText = findViewById(R.id.title_field);
@@ -92,16 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
         dateText.setText(formattedDate);
 
-        // Set the path and database name
-        String path = "/data/data/" + getPackageName() + "/sample.db";
+        //db.execSQL("DROP TABLE IF EXISTS notes");
 
-        // Open the database. If it doesn't exist, create it.
-        SQLiteDatabase db;
-        db = SQLiteDatabase.openOrCreateDatabase(path, null);
 
         // Create a table - notes
         String sql = "CREATE TABLE IF NOT EXISTS notes" +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, start_date DATE, end_date DATE, file_path TEXT, category TEXT );";
+                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, category TEXT, start_date TEXT, end_date TEXT, file_path TEXT );";
         db.execSQL(sql);
 
         db.close();
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //Button search = findViewById(R.id.button2);
+        Button search = findViewById(R.id.searchButton);
 
         Button save = findViewById(R.id.save_note);
 
@@ -141,17 +142,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-/*        search.setOnClickListener(new View.OnClickListener() {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchActivity();
             }
 
-        });*/
+        });
 
     }
 
     public void switchActivity() {
+
         Intent intent = new Intent(this, Search.class);
         startActivity(intent);
     }
@@ -169,10 +171,6 @@ public class MainActivity extends AppCompatActivity {
             endDate.setError("End date cannot be empty");
             return;
         }
-
-        String formattedDate = printDateFormat.format(date);
-
-        FILE_NAME = FILE_NAME + "_" + formattedDate;
 
         String text = noteEditText.getText().toString();
         FileOutputStream outStream = null;
@@ -198,22 +196,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        String path = "/data/data/" + getPackageName() + "/sample.db";
+        String dbpath = "/data/data/" + getPackageName() + "/sample.db";
 
         SQLiteDatabase db;
-        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        db = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
+
+        String path =  getFilesDir() + "/" + FILE_NAME;
+
+        String formattedDate = displayDateFormat.format(date);
 
         // Add Data
         ContentValues values = new ContentValues();
         values.put("title", title);
+        values.put("category", "Test");
         values.put("start_date", formattedDate);
         values.put("end_date", end_Date);
         values.put("file_path", path);
-        values.put("category", "Test");
-        db.insert("notes", null, values);
+        String table = "notes";
+        db.insert(table, null, values);
 
-        //Close the database
-
+        db.close();
 
     }
 
