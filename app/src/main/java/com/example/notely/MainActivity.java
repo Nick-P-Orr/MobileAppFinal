@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                endDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                                startDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
 
                             }
                         }, year, month, day);
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
 
-        String titleQuery = "SELECT * FROM notes WHERE title = FILE_NAME";
+        String titleQuery = "SELECT * FROM notes WHERE title LIKE FILE_NAME";
 
         Cursor cursor = db.rawQuery(titleQuery, null);
         if(cursor.getCount() > 0){
