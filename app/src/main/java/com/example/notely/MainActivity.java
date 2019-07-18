@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,15 +35,15 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView titleEditText;
 
-    private TextView dateText;
+    private TextView startDate;
 
     private TextView endDate;
 
     DatePickerDialog picker;
 
-    Date date = Calendar.getInstance().getTime();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-    SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    SimpleDateFormat complexDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,22 +87,22 @@ public class MainActivity extends AppCompatActivity {
 
         titleEditText = findViewById(R.id.title_field);
 
-        dateText = findViewById(R.id.current_date);
+        startDate = findViewById(R.id.start_date);
 
         endDate = findViewById(R.id.completion_field);
 
         endDate.setShowSoftInputOnFocus(false);
 
-        String formattedDate = displayDateFormat.format(date);
+/*        String formattedDate = simpleDateFormat.format(date);
 
-        dateText.setText(formattedDate);
+        dateText.setText(formattedDate);*/
 
         //db.execSQL("DROP TABLE IF EXISTS notes");
 
 
         // Create a table - notes
         String sql = "CREATE TABLE IF NOT EXISTS notes" +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, category TEXT, start_date TEXT, end_date TEXT, file_path TEXT );";
+                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, category TEXT, start_date TEXT, end_date TEXT, file_path TEXT, lastEdit TEXT);";
         db.execSQL(sql);
 
         db.close();
@@ -127,7 +127,27 @@ public class MainActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                endDate.setText((monthOfYear + 1) + "/" +  dayOfMonth + "/" + year);
+                                endDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+
+                            }
+                        }, year, month, day);
+                picker.show();
+            }
+        });
+
+        startDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                endDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
 
                             }
                         }, year, month, day);
@@ -159,18 +179,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save(View v) {
+
         String FILE_NAME = titleEditText.getText().toString();
         String title = FILE_NAME;
-        if(FILE_NAME.isEmpty()){
+        if (FILE_NAME.isEmpty()) {
             titleEditText.setError("Title cannot be empty");
             return;
         }
 
-        String end_Date = endDate.getText().toString();
-        if(end_Date.isEmpty()){
+        String start_date = startDate.getText().toString();
+        if (start_date.isEmpty()) {
             endDate.setError("End date cannot be empty");
             return;
         }
+
+
+        String end_Date = endDate.getText().toString();
+        if (end_Date.isEmpty()) {
+            endDate.setError("End date cannot be empty");
+            return;
+        }
+
+        String dbPath = "/data/data/" + getPackageName() + "/sample.db";
+
+        SQLiteDatabase db;
+        db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
+
+        String titleQuery = "SELECT * FROM notes WHERE title = FILE_NAME";
+
+        Cursor cursor = db.rawQuery(titleQuery, null);
+        if(cursor.getCount() > 0){
+            FILE_NAME = FILE_NAME + "_(" + cursor.getCount() + 1 + ")";
+            cursor.close();
+        }
+
 
         String text = noteEditText.getText().toString();
         FileOutputStream outStream = null;
@@ -196,22 +238,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        String dbpath = "/data/data/" + getPackageName() + "/sample.db";
+        String path = getFilesDir() + "/" + FILE_NAME;
 
-        SQLiteDatabase db;
-        db = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
+        Date date = new Date();
 
-        String path =  getFilesDir() + "/" + FILE_NAME;
-
-        String formattedDate = displayDateFormat.format(date);
+        String lastEdit = complexDateFormat.format(date);
 
         // Add Data
         ContentValues values = new ContentValues();
         values.put("title", title);
-        values.put("category", "Test");
-        values.put("start_date", formattedDate);
+        values.put("category", "TEST");
+        values.put("start_date", start_date);
         values.put("end_date", end_Date);
         values.put("file_path", path);
+        values.put("lastEdit", lastEdit);
         String table = "notes";
         db.insert(table, null, values);
 
