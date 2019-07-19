@@ -14,8 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView category; // Category
     private TextView startDate; // Start date text
     private TextView endDate; // End date text
+    String FilePath;
+    String SearchTitle;
     boolean EDITMODE = false;
 
     DatePickerDialog picker; // Used to select date on start/end date click
@@ -41,22 +46,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        try {
-            Bundle bundle;
-            bundle = this.getIntent().getExtras();
-            String Title = bundle.getString("Title");
-            String Category = bundle.getString("Category");
-            String StartDate = bundle.getString("Title");
-            String EndDate = bundle.getString("Title");
-            String FilePath = bundle.getString("Category");
-            EDITMODE = true;
-        }catch (NullPointerException e){
-
-        }
-
         // Set the path and database name
-        String path = "/data/data/" + getPackageName() + "/sample.db";
+        String path = "/data/data/" + getPackageName() + "/Notely.db";
 
         // Open the database. If it doesn't exist, create it.
         SQLiteDatabase db;
@@ -73,15 +64,49 @@ public class MainActivity extends AppCompatActivity {
         endDate.setShowSoftInputOnFocus(false);
         startDate.setShowSoftInputOnFocus(false);
 
-        //db.execSQL("DROP TABLE IF EXISTS notes");
+        //db.execSQL("DROP TABLE IF EXISTS Notes");
 
         // Create a table - notes
-        String sql = "CREATE TABLE IF NOT EXISTS notes" +
+        String sql = "CREATE TABLE IF NOT EXISTS Notes" +
                 "(_id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, FilePath TEXT, LastEdit TEXT);";
         db.execSQL(sql);
 
         // Close DB
         db.close();
+
+        // If there is a bundle from Search, extract the data
+        try {
+            Bundle bundle;
+            bundle = this.getIntent().getExtras();
+            SearchTitle = bundle.getString("Title");
+            String Category = bundle.getString("Category");
+            String StartDate = bundle.getString("StartDate");
+            String EndDate = bundle.getString("EndDate");
+            FilePath = bundle.getString("FilePath");
+            titleEditText.setText(SearchTitle);
+            category.setText(Category);
+            startDate.setText(StartDate);
+            endDate.setText(EndDate);
+
+            //Get and read the text file
+            File file = new File(FilePath);
+            StringBuilder noteText = new StringBuilder();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    noteText.append(line);
+                    noteText.append('\n');
+                }
+                br.close();
+            } catch (IOException e) {
+            }
+            //Set the text and EDITMODE to true
+            noteEditText.setText(noteText.toString());
+            EDITMODE = true;
+        } catch (NullPointerException e) {
+        }
+
 
         //@TODO Buttons for testing, must be removed
         Button search = findViewById(R.id.BUTTON);
@@ -177,9 +202,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Open database
-        String dbPath = "/data/data/" + getPackageName() + "/sample.db";
+        String dbPath = "/data/data/" + getPackageName() + "/Notely.db";
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
+
+        if (EDITMODE) {
+            db.delete("Notes", "FilePath = ?", new String[]{SearchTitle});
+            File file = new File(FilePath);
+            file.delete();
+            EDITMODE = false;
+        }
 
         // Add date to file name
         Date date = new Date();
@@ -194,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             outStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
             outStream.write(text.getBytes());
-
-            noteEditText.getText().clear();
             Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
                     Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
@@ -224,12 +254,10 @@ public class MainActivity extends AppCompatActivity {
         values.put("EndDate", end_Date);
         values.put("FilePath", path);
         values.put("LastEdit", lastEdit);
-        String table = "notes";
+        String table = "Notes";
         // Add entry to DB
         db.insert(table, null, values);
         // Close DB
         db.close();
-
     }
-
 }

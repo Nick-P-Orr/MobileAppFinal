@@ -68,7 +68,7 @@ public class Search extends AppCompatActivity {
 
     public void updateListView(String query, Boolean DEFAULT) {
         // Set the path and database name
-        String path = "/data/data/" + getPackageName() + "/sample.db";
+        String path = "/data/data/" + getPackageName() + "/Notely.db";
         // Open the database. If it doesn't exist, create it.
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
@@ -87,7 +87,7 @@ public class Search extends AppCompatActivity {
         }
         // user search case returns ALL notes with matching title
         else {
-            cursorNotes = db.rawQuery("SELECT * from notes WHERE Title = ?", new String[]{query});
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Title = ?", new String[]{query});
         }
 
         int noteCount = 0; // Track number of notes
