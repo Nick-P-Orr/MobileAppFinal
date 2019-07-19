@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView category; // Category
     private TextView startDate; // Start date text
     private TextView endDate; // End date text
-    String FilePath;
+    String noteID;
+    Integer NoteID;
+    String FilePath; // File path of opened file if editing
     String SearchTitle;
-    boolean EDITMODE = false;
 
     DatePickerDialog picker; // Used to select date on start/end date click
     SimpleDateFormat fileDateFormat = new SimpleDateFormat("_yyyy_MM_dd_HH_mm_ss"); // Date format for file name
@@ -53,12 +55,14 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
 
-        // Get text fields
+        // Get text fields and set temp noteID
         noteEditText = findViewById(R.id.note_field);
         titleEditText = findViewById(R.id.title_field);
         category = findViewById(R.id.category_field);
         startDate = findViewById(R.id.start_date);
         endDate = findViewById(R.id.completion_field);
+        NoteID = 0;
+        noteID = NoteID.toString();
 
         // Ensure keyboard doesn't popup on start/end date click
         endDate.setShowSoftInputOnFocus(false);
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a table - notes
         String sql = "CREATE TABLE IF NOT EXISTS Notes" +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, FilePath TEXT, LastEdit TEXT);";
+                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, NoteID TEXT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, FilePath TEXT, LastEdit TEXT);";
         db.execSQL(sql);
 
         // Close DB
@@ -76,8 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
         // If there is a bundle from Search, extract the data
         try {
+            System.out.println("In try loop");
             Bundle bundle;
             bundle = this.getIntent().getExtras();
+            noteID = bundle.getString("NoteID");
+            NoteID = Integer.parseInt(noteID);
+            System.out.println(NoteID);
             SearchTitle = bundle.getString("Title");
             String Category = bundle.getString("Category");
             String StartDate = bundle.getString("StartDate");
@@ -101,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 br.close();
             } catch (IOException e) {
             }
-            //Set the text and EDITMODE to true
+            //Set the text
             noteEditText.setText(noteText.toString());
-            EDITMODE = true;
         } catch (NullPointerException e) {
         }
+
 
 
         //@TODO Buttons for testing, must be removed
@@ -206,12 +214,41 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
 
-        if (EDITMODE) {
-            db.delete("Notes", "FilePath = ?", new String[]{SearchTitle});
-            File file = new File(FilePath);
-            file.delete();
-            EDITMODE = false;
+        if (!NoteID.equals(0)) {
+            System.out.println("In the correct loop");
+            db.delete("Notes", "NoteID = ?", new String[]{noteID});
+            try{
+                File file = new File(FilePath);
+                file.delete();
+            }catch (NullPointerException e){}
         }
+
+        // If this is the first note in the DB
+        Cursor checkEntries;
+        String query = "SELECT * FROM Notes";
+        checkEntries = db.rawQuery(query, null);
+        // if this note does NOT already exist and is not the first entry
+        if (checkEntries.moveToFirst() && checkEntries.getCount() >= 1 && NoteID == 0)
+        {
+            Cursor getMaxNoteID;
+            String newQuery = "SELECT MAX(NoteID) FROM Notes";
+            getMaxNoteID = db.rawQuery(newQuery, null);
+            getMaxNoteID.moveToFirst();
+            noteID = getMaxNoteID.getString(0);
+            NoteID = Integer.parseInt(noteID);
+            NoteID++;
+            getMaxNoteID.close();
+        }
+        // If this note is the first entry
+        if (checkEntries.getCount() == 0)
+        {
+            checkEntries.close();
+            NoteID = 1;
+        }
+
+
+        checkEntries.close();
+        noteID = NoteID.toString();
 
         // Add date to file name
         Date date = new Date();
@@ -248,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add data to ContentValues
         ContentValues values = new ContentValues();
+        values.put("NoteID", noteID);
         values.put("Title", title);
         values.put("Category", category_text);
         values.put("StartDate", start_date);
@@ -259,5 +297,7 @@ public class MainActivity extends AppCompatActivity {
         db.insert(table, null, values);
         // Close DB
         db.close();
+
+        switchActivity();
     }
 }

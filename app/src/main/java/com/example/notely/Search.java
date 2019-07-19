@@ -29,11 +29,23 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // Set list view to display 10 last edited noted
-        String betterQuery = "SELECT * FROM notes ORDER BY lastEdit DESC";
+        String betterQuery = "SELECT * FROM Notes ORDER BY lastEdit DESC";
         updateListView(betterQuery, true);
 
+        //@TODO remove, button is for testing
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent =
+                        new Intent(Search.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //@TODO SAVE THIS QUERY FOR SAM
-        //String query = "SELECT * FROM notes";
+        //String query = "SELECT * FROM Notes";
         // Create query to select notes by most recent edit date
         //String betterQuery = "SELECT * FROM notes ORDER BY title DESC";
 
@@ -95,6 +107,7 @@ public class Search extends AppCompatActivity {
         while (cursorNotes.moveToNext()) {
             ListItem item = new ListItem();
             item.Image = defaultImage;
+            item.NoteID = cursorNotes.getString(cursorNotes.getColumnIndex("NoteID"));
             item.Title = cursorNotes.getString(cursorNotes.getColumnIndex("Title"));
             item.Category = cursorNotes.getString(cursorNotes.getColumnIndex("Category"));
             item.StartDate = cursorNotes.getString(cursorNotes.getColumnIndex("StartDate"));
@@ -120,10 +133,11 @@ public class Search extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) parent.getItemAtPosition(position);
-
                 Intent intent =
                         new Intent(Search.this, MainActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("NoteID", item.getNoteID());
+                System.out.println(item.getNoteID());
                 bundle.putString("Title", item.getTitle());
                 bundle.putString("Category", item.getCategory());
                 bundle.putString("StartDate", item.getStartDate());
