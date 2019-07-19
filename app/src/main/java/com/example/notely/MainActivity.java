@@ -4,13 +4,9 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -29,52 +25,35 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText noteEditText;
+    EditText noteEditText; // EditText for note-taking
+    private TextView titleEditText; // Title of note
+    private TextView category; // Category
+    private TextView startDate; // Start date text
+    private TextView endDate; // End date text
+    boolean EDITMODE = false;
 
-    private TextView mTextMessage;
-
-    private TextView titleEditText;
-
-    private TextView startDate;
-
-    private TextView endDate;
-
-    DatePickerDialog picker;
-
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
-    SimpleDateFormat complexDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_notes);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_takeNote);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_subjects);
-                    return true;
-                case R.id.navigation_settings:
-                    mTextMessage.setText(R.string.title_settings);
-                    return true;
-                case R.id.navigation_search:
-                    mTextMessage.setText(R.string.title_search);
-                    return true;
-            }
-            return false;
-        }
-    };
+    DatePickerDialog picker; // Used to select date on start/end date click
+    SimpleDateFormat fileDateFormat = new SimpleDateFormat("_yyyy_MM_dd_HH_mm_ss"); // Date format for file name
+    SimpleDateFormat editDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Date format for last edit
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        try {
+            Bundle bundle;
+            bundle = this.getIntent().getExtras();
+            String Title = bundle.getString("Title");
+            String Category = bundle.getString("Category");
+            String StartDate = bundle.getString("Title");
+            String EndDate = bundle.getString("Title");
+            String FilePath = bundle.getString("Category");
+            EDITMODE = true;
+        }catch (NullPointerException e){
+
+        }
 
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/sample.db";
@@ -83,38 +62,32 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
 
+        // Get text fields
         noteEditText = findViewById(R.id.note_field);
-
         titleEditText = findViewById(R.id.title_field);
-
+        category = findViewById(R.id.category_field);
         startDate = findViewById(R.id.start_date);
-
         endDate = findViewById(R.id.completion_field);
 
+        // Ensure keyboard doesn't popup on start/end date click
         endDate.setShowSoftInputOnFocus(false);
-
-/*        String formattedDate = simpleDateFormat.format(date);
-
-        dateText.setText(formattedDate);*/
+        startDate.setShowSoftInputOnFocus(false);
 
         //db.execSQL("DROP TABLE IF EXISTS notes");
 
-
         // Create a table - notes
         String sql = "CREATE TABLE IF NOT EXISTS notes" +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, category TEXT, start_date TEXT, end_date TEXT, file_path TEXT, lastEdit TEXT);";
+                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, FilePath TEXT, LastEdit TEXT);";
         db.execSQL(sql);
 
+        // Close DB
         db.close();
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        Button search = findViewById(R.id.searchButton);
-
+        //@TODO Buttons for testing, must be removed
+        Button search = findViewById(R.id.BUTTON);
         Button save = findViewById(R.id.save_note);
 
+        // Set click listeners for start and end date
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 picker.show();
             }
         });
-
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,13 +127,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //@TODO Buttons for testing, must be updated
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 save(v);
             }
         });
-
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,51 +144,53 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //@TODO must update to fragment method
     public void switchActivity() {
-
         Intent intent = new Intent(this, Search.class);
         startActivity(intent);
     }
 
+    //Method to save note to local .txt file and add entry to database
     public void save(View v) {
-
+        //Ensure that all required fields are populated
         String FILE_NAME = titleEditText.getText().toString();
         String title = FILE_NAME;
+        FILE_NAME = FILE_NAME.replaceAll(" ", "_");
         if (FILE_NAME.isEmpty()) {
             titleEditText.setError("Title cannot be empty");
             return;
         }
-
-        String start_date = startDate.getText().toString();
-        if (start_date.isEmpty()) {
-            endDate.setError("End date cannot be empty");
+        String category_text = category.getText().toString();
+        if (category_text.isEmpty()) {
+            category.setError("Category cannot be empty");
             return;
         }
-
-
+        String start_date = startDate.getText().toString();
+        if (start_date.isEmpty()) {
+            startDate.setError("Start date cannot be empty");
+            return;
+        }
         String end_Date = endDate.getText().toString();
         if (end_Date.isEmpty()) {
             endDate.setError("End date cannot be empty");
             return;
         }
 
+        // Open database
         String dbPath = "/data/data/" + getPackageName() + "/sample.db";
-
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
 
-        String titleQuery = "SELECT * FROM notes WHERE title LIKE FILE_NAME";
+        // Add date to file name
+        Date date = new Date();
+        String fileDate = fileDateFormat.format(date);
+        FILE_NAME = FILE_NAME + fileDate;
 
-        Cursor cursor = db.rawQuery(titleQuery, null);
-        if(cursor.getCount() > 0){
-            FILE_NAME = FILE_NAME + "_(" + cursor.getCount() + 1 + ")";
-            cursor.close();
-        }
-
-
+        // Get text in note field
         String text = noteEditText.getText().toString();
         FileOutputStream outStream = null;
 
+        // write the note to a local .txt file
         try {
             outStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
             outStream.write(text.getBytes());
@@ -238,23 +212,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Get file path and last edit date
         String path = getFilesDir() + "/" + FILE_NAME;
+        String lastEdit = editDateFormat.format(date);
 
-        Date date = new Date();
-
-        String lastEdit = complexDateFormat.format(date);
-
-        // Add Data
+        // Add data to ContentValues
         ContentValues values = new ContentValues();
-        values.put("title", title);
-        values.put("category", "TEST");
-        values.put("start_date", start_date);
-        values.put("end_date", end_Date);
-        values.put("file_path", path);
-        values.put("lastEdit", lastEdit);
+        values.put("Title", title);
+        values.put("Category", category_text);
+        values.put("StartDate", start_date);
+        values.put("EndDate", end_Date);
+        values.put("FilePath", path);
+        values.put("LastEdit", lastEdit);
         String table = "notes";
+        // Add entry to DB
         db.insert(table, null, values);
-
+        // Close DB
         db.close();
 
     }

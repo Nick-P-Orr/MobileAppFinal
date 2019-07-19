@@ -27,23 +27,23 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         // Set image
                 ImageView image;
                 image = view.findViewById(R.id.image);
-                image.setImageBitmap(item.image);
+                image.setImageBitmap(item.Image);
         // Set title
                 TextView title;
                 title = view.findViewById(R.id.title1);
-                title.setText(item.title);
+                title.setText(item.Title);
         // Set category
                 TextView category;
                 category = view.findViewById(R.id.category1);
-                category.setText(item.category);
+                category.setText(item.Category);
       // Set start_date
                 TextView startDate;
                 startDate = view.findViewById(R.id.startDate1);
-                startDate.setText(item.startDate);
+                startDate.setText(item.StartDate);
         // Set end_date
                 TextView endDate;
                 endDate = view.findViewById(R.id.endDate1);
-                endDate.setText(item.endDate);
+                endDate.setText(item.EndDate);
                 return view;
     }
 }
