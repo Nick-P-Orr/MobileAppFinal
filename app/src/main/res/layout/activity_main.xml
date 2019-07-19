@@ -31,20 +31,24 @@
 
         <EditText
             android:id="@+id/note_field"
-            android:layout_width="335dp"
-            android:layout_height="374dp"
+            android:layout_width="346dp"
+            android:layout_height="355dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginBottom="60dp"
             android:ems="10"
             android:gravity="start|top"
             android:hint="Write Note Here!"
             android:inputType="textMultiLine"
+            app:layout_constraintBottom_toTopOf="@+id/nav_view"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.489"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category_field" />
+            app:layout_constraintTop_toBottomOf="@+id/category_field"
+            app:layout_constraintVertical_bias="0.105" />
 
         <EditText
             android:id="@+id/category_field"
@@ -134,14 +138,14 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="40dp"
             android:text="Save Note"
             app:layout_constraintBottom_toTopOf="@+id/nav_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.692"
+            app:layout_constraintHorizontal_bias="0.804"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/note_field"
-            app:layout_constraintVertical_bias="0.472" />
+            app:layout_constraintVertical_bias="0.178" />
 
         <Button
             android:id="@+id/BUTTON"
@@ -152,12 +156,27 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="40dp"
             android:text="@string/title_search"
             app:layout_constraintBottom_toTopOf="@+id/nav_view"
             app:layout_constraintEnd_toStartOf="@+id/save_note"
+            app:layout_constraintHorizontal_bias="0.471"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/note_field" />
+            app:layout_constraintTop_toBottomOf="@+id/note_field"
+            app:layout_constraintVertical_bias="0.178" />
+
+        <Button
+            android:id="@+id/testDataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="28dp"
+            android:text="Create Test Data"
+            app:layout_constraintBottom_toTopOf="@+id/nav_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/save_note" />
 
 
     </android.support.constraint.ConstraintLayout>

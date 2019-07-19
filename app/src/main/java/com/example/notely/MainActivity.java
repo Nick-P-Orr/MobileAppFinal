@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         String sql = "CREATE TABLE IF NOT EXISTS Notes" +
                 "(_id INTEGER PRIMARY KEY AUTOINCREMENT, NoteID TEXT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, FilePath TEXT, LastEdit TEXT);";
         db.execSQL(sql);
-
         // Close DB
         db.close();
 
@@ -115,10 +114,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         //@TODO Buttons for testing, must be removed
         Button search = findViewById(R.id.BUTTON);
         Button save = findViewById(R.id.save_note);
+        Button testDate = findViewById(R.id.testDataButton);
+
+        testDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Makes 99 notes
+                makeTestData();
+            }
+        });
 
         // Set click listeners for start and end date
         endDate.setOnClickListener(new View.OnClickListener() {
@@ -217,10 +224,11 @@ public class MainActivity extends AppCompatActivity {
         if (!NoteID.equals(0)) {
             System.out.println("In the correct loop");
             db.delete("Notes", "NoteID = ?", new String[]{noteID});
-            try{
+            try {
                 File file = new File(FilePath);
                 file.delete();
-            }catch (NullPointerException e){}
+            } catch (NullPointerException e) {
+            }
         }
 
         // If this is the first note in the DB
@@ -228,8 +236,7 @@ public class MainActivity extends AppCompatActivity {
         String query = "SELECT * FROM Notes";
         checkEntries = db.rawQuery(query, null);
         // if this note does NOT already exist and is not the first entry
-        if (checkEntries.moveToFirst() && checkEntries.getCount() >= 1 && NoteID == 0)
-        {
+        if (checkEntries.moveToFirst() && checkEntries.getCount() >= 1 && NoteID == 0) {
             Cursor getMaxNoteID;
             String newQuery = "SELECT MAX(NoteID) FROM Notes";
             getMaxNoteID = db.rawQuery(newQuery, null);
@@ -240,8 +247,7 @@ public class MainActivity extends AppCompatActivity {
             getMaxNoteID.close();
         }
         // If this note is the first entry
-        if (checkEntries.getCount() == 0)
-        {
+        if (checkEntries.getCount() == 0) {
             checkEntries.close();
             NoteID = 1;
         }
@@ -299,5 +305,70 @@ public class MainActivity extends AppCompatActivity {
         db.close();
 
         switchActivity();
+    }
+
+    public void makeTestData() {
+
+        // Open database
+        String dbPath = "/data/data/" + getPackageName() + "/Notely.db";
+        SQLiteDatabase db;
+        db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
+
+        for (int i = 1; i < 100; i++) {
+            //Ensure that all required fields are populated
+            String FILE_NAME = "Test Note " + i;
+            String title = FILE_NAME;
+            FILE_NAME = FILE_NAME.replaceAll(" ", "_");
+            String category_text = "Test";
+            String start_date = "7/19/19";
+            String end_Date = "7/28/19";
+
+            // Add date to file name
+            Date date = new Date();
+            String fileDate = fileDateFormat.format(date);
+            FILE_NAME = FILE_NAME + fileDate;
+
+            // Get text in note field
+            String text = "This is Test Note #" + i;
+            FileOutputStream outStream = null;
+
+            // write the note to a local .txt file
+            try {
+                outStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
+                outStream.write(text.getBytes());
+                Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
+                        Toast.LENGTH_LONG).show();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (outStream != null) {
+                    try {
+                        outStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            // Get file path and last edit date
+            String path = getFilesDir() + "/" + FILE_NAME;
+            String lastEdit = editDateFormat.format(date);
+
+            // Add data to ContentValues
+            ContentValues values = new ContentValues();
+            values.put("NoteID", i);
+            values.put("Title", title);
+            values.put("Category", category_text);
+            values.put("StartDate", start_date);
+            values.put("EndDate", end_Date);
+            values.put("FilePath", path);
+            values.put("LastEdit", lastEdit);
+            String table = "Notes";
+            // Add entry to DB
+            db.insert(table, null, values);
+        }
+        // Close DB
+        db.close();
     }
 }
