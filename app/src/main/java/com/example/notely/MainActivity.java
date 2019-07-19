@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView category; // Category
     private TextView startDate; // Start date text
     private TextView endDate; // End date text
-    String noteID;
-    Integer NoteID;
+    String noteID; // String NoteID
+    Integer NoteID; // Integer NoteID
     String FilePath; // File path of opened file if editing
     String SearchTitle;
 
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             NoteID = 1;
         }
 
-
+        // close cursor and update NoteID
         checkEntries.close();
         noteID = NoteID.toString();
 
