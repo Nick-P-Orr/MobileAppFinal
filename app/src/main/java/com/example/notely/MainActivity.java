@@ -304,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         // Close DB
         db.close();
 
+        // switch to search activity
         switchActivity();
     }
 
