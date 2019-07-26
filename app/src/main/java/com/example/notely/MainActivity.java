@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         final String date = df.format(Calendar.getInstance().getTime());
 
@@ -59,10 +60,33 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
 
         Button save_btn = (Button)findViewById(R.id.save_note);
+        Button change_font = (Button)findViewById(R.id.change_font);
 
         ((TextView)findViewById(R.id.current_date)).setText(date);
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+
+        change_font.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("myApp", "Activity1 button is clicked");
+                Intent intent2 = new Intent();
+                intent2.setClass(MainActivity.this, ChangeFont.class);
+
+                Bundle bundle = new Bundle();
+                intent2.putExtras(bundle);
+
+                Log.v("myApp", "Switching to font changer");
+                startActivity(intent2);
+                Log.v("myApp", "Start Activity hit");
+
+
+            }
+        });
+
+
 
         save_btn.setOnClickListener(new View.OnClickListener() {
 
@@ -70,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent();
-
-
 
                 String note_field = ((EditText)findViewById(R.id.note_field)).getText().toString();
                 String category_field = ((EditText)findViewById(R.id.category_field)).getText().toString();
