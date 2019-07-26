@@ -1,96 +1,76 @@
 package com.example.notely;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mTextMessage;
-    private static final String TAG = "MyActivity";
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_notes);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_takeNote);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_subjects);
-                    return true;
-                case R.id.navigation_settings:
-                    mTextMessage.setText(R.string.title_settings);
-                    return true;
-                case R.id.navigation_search:
-                    mTextMessage.setText(R.string.title_search);
-                    return true;
-            }
-            return false;
-        }
-    };
-
-
+    private ActionBar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-        final String date = df.format(Calendar.getInstance().getTime());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
+        toolbar = getSupportActionBar();
 
-        Button save_btn = (Button)findViewById(R.id.save_note);
-
-        ((TextView)findViewById(R.id.current_date)).setText(date);
-
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        save_btn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
+        // load the Note_first fragment by default
+        toolbar.setTitle("Notely");
 
 
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.nav_view);
 
-                String note_field = ((EditText)findViewById(R.id.note_field)).getText().toString();
-                String category_field = ((EditText)findViewById(R.id.category_field)).getText().toString();
-                String date_field = ((EditText)findViewById(R.id.current_date)).getText().toString();
-                String title_field = ((EditText)findViewById(R.id.title_field)).getText().toString();
-                String completion_date = ((EditText)findViewById(R.id.completion_field)).getText().toString();
+    bottomNavigationView.setOnNavigationItemSelectedListener
+            (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment loadFragment = null;
 
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            //NEW NOTES
+                            toolbar.setTitle("Notes");
+                            loadFragment = new Note_first();
+                            break;
+                        case R.id.navigation_allnotes:
+                            //ALL NOTES
+                            toolbar.setTitle("All Notes");
+                            loadFragment = new AllNotes_frag();
+                            break;
+                        case R.id.navigation_subjects:
+                            //SUBJECTS
+                            toolbar.setTitle("Categories");
+                            loadFragment = new Subjects();
+                            break;
+                        case R.id.navigation_search:
+                            //SEARCH
+                            toolbar.setTitle("Search");
+                            loadFragment = new Search_frag();
+                            break;
+                        case R.id.navigation_setting:
+                            //SETTINGS
+                            toolbar.setTitle("Settings");
+                            loadFragment = new Setting();
+                            break;
+                    }
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, loadFragment);
+                    transaction.commit();
+                    return true;
+                }
+            });
 
-
-
-                intent.setClass(MainActivity.this, MainActivity.class);
-
-                Log.v("myApp", "Save Note button is clicked");
-
-
-            }
-
-        });
-
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, Note_first.newInstance());
+        transaction.commit();
     }
 
 }
