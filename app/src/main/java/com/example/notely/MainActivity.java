@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Integer NoteID; // Integer NoteID
     String FilePath; // File path of opened file if editing
     String SearchTitle;
+    private ActionBar toolbar;
 
     DatePickerDialog picker; // Used to select date on start/end date click
     SimpleDateFormat fileDateFormat = new SimpleDateFormat("_yyyy_MM_dd_HH_mm_ss"); // Date format for file name
@@ -47,6 +52,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = getSupportActionBar();
+
+        // load the Note_first fragment by default
+        toolbar.setTitle("Notely");
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.navigation_home:
+                                //NEW NOTES
+                                toolbar.setTitle("Notes");
+                                break;
+                            case R.id.navigation_allnotes:
+                                //ALL NOTES
+                                toolbar.setTitle("All Notes");
+                                break;
+                            case R.id.navigation_subjects:
+                                //SUBJECTS
+                                toolbar.setTitle("Categories");
+                                break;
+                            case R.id.navigation_search:
+                                //SEARCH
+                                toolbar.setTitle("Search");
+                                break;
+                            case R.id.navigation_settings:
+                                //SETTINGS
+                                toolbar.setTitle("Settings");
+                                break;
+                        }
+                        return true;
+                    }
+                });
+
 
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
