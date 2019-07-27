@@ -19,8 +19,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllNotes extends AppCompatActivity {
-
+public class IndividualCategory extends AppCompatActivity {
     @TargetApi(27)
     private ActionBar toolbar;
 
@@ -30,10 +29,10 @@ public class AllNotes extends AppCompatActivity {
         setContentView(R.layout.activity_allnotes);
 
         toolbar = getSupportActionBar();
-        toolbar.setTitle("All Notes");
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_categories);
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -44,7 +43,8 @@ public class AllNotes extends AppCompatActivity {
                                 switchActivity(2);
                                 break;
                             case R.id.navigation_allnotes:
-                                //ALL NOTES
+                                toolbar.setTitle("All Notes");
+                                switchActivity(4);
                                 break;
                             case R.id.navigation_categories:
                                 //SUBJECTS
@@ -66,10 +66,11 @@ public class AllNotes extends AppCompatActivity {
                     }
                 });
 
-
-        //Create query to select notes by most recent edit date
-        String betterQuery = "SELECT * FROM notes ORDER BY title DESC";
-        updateListView(betterQuery);
+        Bundle bundle;
+        bundle = this.getIntent().getExtras();
+        String Category = bundle.getString("Category");
+        toolbar.setTitle(Category);
+        updateListView(Category);
 
     }
 
@@ -88,8 +89,7 @@ public class AllNotes extends AppCompatActivity {
         // Create Cursor to traverse notes
         Cursor cursorNotes;
 
-        // default case populates the list view with the last 10 edited items
-        cursorNotes = db.rawQuery(query, null);
+        cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ?", new String[]{query});
 
         // Create items of notes and add them to list
         while (cursorNotes.moveToNext()) {
@@ -119,7 +119,7 @@ public class AllNotes extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) parent.getItemAtPosition(position);
                 Intent intent =
-                        new Intent(AllNotes.this, MainActivity.class);
+                        new Intent(IndividualCategory.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("NoteID", item.getNoteID());
                 System.out.println(item.getNoteID());
@@ -150,7 +150,11 @@ public class AllNotes extends AppCompatActivity {
             case (3):
                 intent = new Intent(this, Categories.class);
                 break;
+            case (4):
+                intent = new Intent(this, AllNotes.class);
+                break;
         }
         startActivity(intent);
     }
 }
+

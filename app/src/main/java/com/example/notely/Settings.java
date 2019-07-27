@@ -28,17 +28,18 @@ public class Settings extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
-                                toolbar.setTitle("Notes");
+                                toolbar.setTitle("Notely");
                                 switchActivity(2);
                                 break;
                             case R.id.navigation_allnotes:
                                 //ALL NOTES
+                                toolbar.setTitle("All Notes");
                                 switchActivity(3);
                                 break;
-                            case R.id.navigation_subjects:
+                            case R.id.navigation_categories:
                                 //SUBJECTS
                                 toolbar.setTitle("Categories");
-                                switchActivity(0);
+                                switchActivity(1);
                                 break;
                             case R.id.navigation_search:
                                 //SEARCH
@@ -60,7 +61,7 @@ public class Settings extends AppCompatActivity {
                 intent = new Intent(this, Search.class);
                 break;
             case (1):
-                intent = new Intent(this, Settings.class);
+                intent = new Intent(this, Categories.class);
                 break;
             case (2):
                 intent = new Intent(this, MainActivity.class);

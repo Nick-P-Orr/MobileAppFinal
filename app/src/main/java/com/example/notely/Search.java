@@ -44,22 +44,21 @@ public class Search extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
-                                toolbar.setTitle("Notes");
+                                toolbar.setTitle("Notely");
                                 switchActivity(2);
                                 break;
                             case R.id.navigation_allnotes:
                                 //ALL NOTES
+                                toolbar.setTitle("All Notes");
                                 switchActivity(3);
                                 break;
-                            case R.id.navigation_subjects:
+                            case R.id.navigation_categories:
                                 //SUBJECTS
                                 toolbar.setTitle("Categories");
                                 switchActivity(0);
                                 break;
                             case R.id.navigation_search:
                                 //SEARCH
-                                toolbar.setTitle("Search");
-                                switchActivity(0);
                                 break;
                             case R.id.navigation_setting:
                                 //SETTINGS
@@ -76,17 +75,6 @@ public class Search extends AppCompatActivity {
         String betterQuery = "SELECT * FROM Notes ORDER BY lastEdit DESC";
         updateListView(betterQuery, true);
 
-        //@TODO remove, button is for testing
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent =
-                        new Intent(Search.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         //@TODO SAVE THIS QUERY FOR SAM
         //String query = "SELECT * FROM Notes";
@@ -200,7 +188,7 @@ public class Search extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         switch (activity) {
             case (0):
-                intent = new Intent(this, Search.class);
+                intent = new Intent(this, Categories.class);
                 break;
             case (1):
                 intent = new Intent(this, Settings.class);

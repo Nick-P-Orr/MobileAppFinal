@@ -9,7 +9,7 @@
         android:title="@string/title_notes"/>
 
     <item
-        android:id="@+id/navigation_subjects"
+        android:id="@+id/navigation_categories"
         android:icon="@drawable/ic_action_subjects"
         android:title="@string/title_subjects"/>
 

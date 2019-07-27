@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     String SearchTitle;
     Boolean unsavedChanges = false;
     private ActionBar toolbar;
-    private Context context;
 
     DatePickerDialog picker; // Used to select date on start/end date click
     SimpleDateFormat fileDateFormat = new SimpleDateFormat("_yyyy_MM_dd_HH_mm_ss"); // Date format for file name
@@ -73,40 +72,40 @@ public class MainActivity extends AppCompatActivity {
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.navigation_home:
-                                //NEW NOTES
-                                toolbar.setTitle("Notes");
-                                break;
-                            case R.id.navigation_allnotes:
-                                //ALL NOTES
-                                toolbar.setTitle("All Notes");
-                                if (unsavedChanges)
-                                    savePrompt();
-                                switchActivity(2);
-                                break;
-                            case R.id.navigation_subjects:
-                                //SUBJECTS
-                                toolbar.setTitle("Categories");
-                                if (unsavedChanges)
-                                    savePrompt();
-                                switchActivity(0);
-                                break;
-                            case R.id.navigation_search:
-                                //SEARCH
-                                toolbar.setTitle("Search");
-                                if (unsavedChanges)
-                                    savePrompt();
-                                switchActivity(0);
-                                break;
-                            case R.id.navigation_setting:
-                                //SETTINGS
-                                toolbar.setTitle("Settings");
-                                if (unsavedChanges)
-                                    savePrompt();
-                                switchActivity(1);
-                                break;
-                        }
+                        int switchcase = 0;
+                            switch (item.getItemId()) {
+                                case R.id.navigation_home:
+                                    //NEW NOTES
+                                    switchcase = -1;
+                                    toolbar.setTitle("Notely");
+                                    break;
+                                case R.id.navigation_allnotes:
+                                    //ALL NOTES
+                                    toolbar.setTitle("All Notes");
+                                    switchcase = 2;
+                                    break;
+                                case R.id.navigation_categories:
+                                    //CATEGORIES
+                                    toolbar.setTitle("Categories");
+                                    switchcase = 3;
+                                    break;
+                                case R.id.navigation_search:
+                                    //SEARCH
+                                    toolbar.setTitle("Search");
+                                    switchcase = 0;
+                                    break;
+                                case R.id.navigation_setting:
+                                    //SETTINGS
+                                    toolbar.setTitle("Settings");
+                                    switchcase = 1;
+                                    break;
+                            }
+                        if(switchcase == -1)
+                            return true;
+                        if (unsavedChanges)
+                            savePrompt(switchcase);
+                        else
+                            switchActivity(switchcase);
                         return true;
                     }
                 });
@@ -175,20 +174,6 @@ public class MainActivity extends AppCompatActivity {
             noteEditText.setText(noteText.toString());
         } catch (NullPointerException e) {
         }
-
-
-        //@TODO Buttons for testing, must be removed
-        Button search = findViewById(R.id.BUTTON);
-        Button save = findViewById(R.id.save_note);
-        Button testDate = findViewById(R.id.testDataButton);
-
-        testDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Makes 99 notes
-                makeTestData();
-            }
-        });
 
         // Set click listeners for start and end date
         endDate.setOnClickListener(new View.OnClickListener() {
@@ -311,18 +296,13 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        Button save = findViewById(R.id.save_note);
 
         //@TODO Buttons for testing, must be updated
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save();
-            }
-        });
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchActivity(1);
+                save(true);
             }
         });
     }
@@ -341,29 +321,33 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(this, AllNotes.class);
                 break;
             case (3):
-                intent = new Intent(this, Search.class);
+                intent = new Intent(this, Categories.class);
                 break;
         }
         startActivity(intent);
     }
 
-    public void savePrompt() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public void savePrompt(final int switchcase) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("WARNING! ANY WORK NOT SAVED WILL BE LOST! Save current note?");
-        builder.setCancelable(true);
+        builder.setCancelable(false);
         builder.setPositiveButton(
                 "Yes",
                 new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        save();
+                        save(false);
                         dialog.cancel();
+                        switchActivity(switchcase);
                     }
                 });
         builder.setNegativeButton(
                 "No",
                 new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        switchActivity(switchcase);
                     }
                 });
         AlertDialog saveAlert = builder.create();
@@ -371,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Method to save note to local .txt file and add entry to database
-    public void save() {
+    public void save(Boolean DEFAULT) {
         //Ensure that all required fields are populated
         String FILE_NAME = titleEditText.getText().toString();
         String title = FILE_NAME;
@@ -484,8 +468,10 @@ public class MainActivity extends AppCompatActivity {
         // Close DB
         db.close();
 
-        // switch to search activity
-        switchActivity(1);
+        if (DEFAULT) {
+            // switch to search activity
+            switchActivity(1);
+        }
     }
 
     public void makeTestData() {
