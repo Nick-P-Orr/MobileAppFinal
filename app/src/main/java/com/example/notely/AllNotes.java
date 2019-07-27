@@ -6,24 +6,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Search extends AppCompatActivity {
+public class AllNotes extends AppCompatActivity {
 
     @TargetApi(27)
     private ActionBar toolbar;
@@ -31,13 +27,13 @@ public class Search extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_allnotes);
 
         toolbar = getSupportActionBar();
-        toolbar.setTitle("Search");
+        toolbar.setTitle("All Notes");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_search);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -49,7 +45,6 @@ public class Search extends AppCompatActivity {
                                 break;
                             case R.id.navigation_allnotes:
                                 //ALL NOTES
-                                switchActivity(3);
                                 break;
                             case R.id.navigation_subjects:
                                 //SUBJECTS
@@ -72,59 +67,13 @@ public class Search extends AppCompatActivity {
                 });
 
 
-        // Set list view to display 10 last edited noted
-        String betterQuery = "SELECT * FROM Notes ORDER BY lastEdit DESC";
-        updateListView(betterQuery, true);
+        //Create query to select notes by most recent edit date
+        String betterQuery = "SELECT * FROM notes ORDER BY title DESC";
+        updateListView(betterQuery);
 
-        //@TODO remove, button is for testing
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent =
-                        new Intent(Search.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //@TODO SAVE THIS QUERY FOR SAM
-        //String query = "SELECT * FROM Notes";
-        // Create query to select notes by most recent edit date
-        //String betterQuery = "SELECT * FROM notes ORDER BY title DESC";
-
-        // Create search bar onclick  listener and string to hold input
-        final EditText searchBar = findViewById(R.id.searchBar);
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Get user input and update list
-                String userQuery = s.toString();
-                updateListView(userQuery, false);
-            }
-        });
-
-        //@TODO GIVE CODE TO SAM FOR CATEGORIES TAB
-/*        // Get distinct categories
-        String colQuery = "SELECT DISTINCT(category) FROM notes";
-        Cursor cursorCnotes = db.rawQuery(colQuery,null);
-        while (cursorCnotes.moveToNext()){
-            System.out.println(cursorCnotes.getString(cursorCnotes.getColumnIndex("category")));
-        }
-        // Close the cursor and database
-        cursorCnotes.close();
-        db.close();*/
     }
 
-    public void updateListView(String query, Boolean DEFAULT) {
+    public void updateListView(String query) {
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
         // Open the database. If it doesn't exist, create it.
@@ -140,15 +89,8 @@ public class Search extends AppCompatActivity {
         Cursor cursorNotes;
 
         // default case populates the list view with the last 10 edited items
-        if (DEFAULT) {
-            cursorNotes = db.rawQuery(query, null);
-        }
-        // user search case returns ALL notes with matching title
-        else {
-            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Title = ?", new String[]{query});
-        }
+        cursorNotes = db.rawQuery(query, null);
 
-        int noteCount = 0; // Track number of notes
         // Create items of notes and add them to list
         while (cursorNotes.moveToNext()) {
             ListItem item = new ListItem();
@@ -161,9 +103,6 @@ public class Search extends AppCompatActivity {
             item.FilePath = cursorNotes.getString(cursorNotes.getColumnIndex("FilePath"));
             item.LastEdit = cursorNotes.getString(cursorNotes.getColumnIndex("LastEdit"));
             list.add(item);
-            noteCount++;
-            if (DEFAULT && noteCount >= 9) // If populating listview in default mode, limit to 10 notes
-                break;
         }
         // Close the cursor and database
         cursorNotes.close();
@@ -180,7 +119,7 @@ public class Search extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) parent.getItemAtPosition(position);
                 Intent intent =
-                        new Intent(Search.this, MainActivity.class);
+                        new Intent(AllNotes.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("NoteID", item.getNoteID());
                 System.out.println(item.getNoteID());
@@ -209,11 +148,9 @@ public class Search extends AppCompatActivity {
                 intent = new Intent(this, MainActivity.class);
                 break;
             case (3):
-                intent = new Intent(this, AllNotes.class);
+                intent = new Intent(this, Search.class);
                 break;
         }
         startActivity(intent);
     }
 }
-
-

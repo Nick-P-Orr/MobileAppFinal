@@ -1,8 +1,11 @@
 package com.example.notely;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +14,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
     Integer NoteID; // Integer NoteID
     String FilePath; // File path of opened file if editing
     String SearchTitle;
+    Boolean unsavedChanges = false;
     private ActionBar toolbar;
+    private Context context;
 
     DatePickerDialog picker; // Used to select date on start/end date click
     SimpleDateFormat fileDateFormat = new SimpleDateFormat("_yyyy_MM_dd_HH_mm_ss"); // Date format for file name
     SimpleDateFormat editDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Date format for last edit
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -73,24 +81,35 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.navigation_allnotes:
                                 //ALL NOTES
                                 toolbar.setTitle("All Notes");
+                                if (unsavedChanges)
+                                    savePrompt();
+                                switchActivity(2);
                                 break;
                             case R.id.navigation_subjects:
                                 //SUBJECTS
                                 toolbar.setTitle("Categories");
+                                if (unsavedChanges)
+                                    savePrompt();
+                                switchActivity(0);
                                 break;
                             case R.id.navigation_search:
                                 //SEARCH
                                 toolbar.setTitle("Search");
+                                if (unsavedChanges)
+                                    savePrompt();
+                                switchActivity(0);
                                 break;
-                            case R.id.navigation_settings:
+                            case R.id.navigation_setting:
                                 //SETTINGS
                                 toolbar.setTitle("Settings");
+                                if (unsavedChanges)
+                                    savePrompt();
+                                switchActivity(1);
                                 break;
                         }
                         return true;
                     }
                 });
-
 
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
@@ -211,31 +230,148 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        noteEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                unsavedChanges = true;
+            }
+
+        });
+
+        startDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                unsavedChanges = true;
+            }
+
+        });
+
+        endDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                unsavedChanges = true;
+            }
+
+        });
+
+        category.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                unsavedChanges = true;
+            }
+
+        });
+
+        titleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                unsavedChanges = true;
+            }
+
+        });
+
+
         //@TODO Buttons for testing, must be updated
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save(v);
+                save();
             }
         });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchActivity();
+                switchActivity(1);
             }
-
         });
-
     }
 
-    //@TODO must update to fragment method
-    public void switchActivity() {
-        Intent intent = new Intent(this, Search.class);
+    //@TODO
+    public void switchActivity(int activity) {
+        Intent intent = new Intent(this, MainActivity.class);
+        switch (activity) {
+            case (0):
+                intent = new Intent(this, Search.class);
+                break;
+            case (1):
+                intent = new Intent(this, Settings.class);
+                break;
+            case (2):
+                intent = new Intent(this, AllNotes.class);
+                break;
+            case (3):
+                intent = new Intent(this, Search.class);
+                break;
+        }
         startActivity(intent);
     }
 
+    public void savePrompt() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("WARNING! ANY WORK NOT SAVED WILL BE LOST! Save current note?");
+        builder.setCancelable(true);
+        builder.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        save();
+                        dialog.cancel();
+                    }
+                });
+        builder.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog saveAlert = builder.create();
+        saveAlert.show();
+    }
+
     //Method to save note to local .txt file and add entry to database
-    public void save(View v) {
+    public void save() {
         //Ensure that all required fields are populated
         String FILE_NAME = titleEditText.getText().toString();
         String title = FILE_NAME;
@@ -349,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
         db.close();
 
         // switch to search activity
-        switchActivity();
+        switchActivity(1);
     }
 
     public void makeTestData() {
