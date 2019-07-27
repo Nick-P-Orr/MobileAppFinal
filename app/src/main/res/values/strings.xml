@@ -10,4 +10,11 @@
     <string name="category">Category</string>
     <string name="completion_date">Completion Date</string>
     <string name="written_date">Written Date</string>
+
+    <string-array name="order_list">
+        <item>Title Descending</item>
+        <item>Title Ascending</item>
+        <item>Last Edit Descending</item>
+        <item>Last Edit Ascending</item>
+    </string-array>
 </resources>

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +67,36 @@ public class AllNotes extends AppCompatActivity {
                     }
                 });
 
-
         //Create query to select notes by most recent edit date
-        String betterQuery = "SELECT * FROM notes ORDER BY title DESC";
-        updateListView(betterQuery);
+        String query = "SELECT * FROM notes ORDER BY title DESC";
+        updateListView(query);
+
+        Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
+        sortingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+                String updatedQuery = "SELECT * FROM notes ORDER BY title DESC";
+                if (selected.equals("Title Descending")) {
+                    updatedQuery = "SELECT * FROM notes ORDER BY title DESC";
+
+                } else if (selected.equals("Title Ascending")) {
+                    updatedQuery = "SELECT * FROM notes ORDER BY title ASC";
+
+                } else if (selected.equals("Last Edit Descending")) {
+                    updatedQuery = "SELECT * FROM notes ORDER BY lastedit DESC";
+
+                } else if (selected.equals("Last Edit Ascending")) {
+                    updatedQuery = "SELECT * FROM notes ORDER BY lastedit ASC";
+                }
+                updateListView(updatedQuery);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Another interface callback
+            }
+        });
 
     }
 
