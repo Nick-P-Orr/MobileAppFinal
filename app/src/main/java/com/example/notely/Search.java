@@ -75,12 +75,6 @@ public class Search extends AppCompatActivity {
         String betterQuery = "SELECT * FROM Notes ORDER BY lastEdit DESC";
         updateListView(betterQuery, true);
 
-
-        //@TODO SAVE THIS QUERY FOR SAM
-        //String query = "SELECT * FROM Notes";
-        // Create query to select notes by most recent edit date
-        //String betterQuery = "SELECT * FROM notes ORDER BY title DESC";
-
         // Create search bar onclick  listener and string to hold input
         final EditText searchBar = findViewById(R.id.searchBar);
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -95,21 +89,11 @@ public class Search extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 // Get user input and update list
-                String userQuery = s.toString();
+                String input = s.toString();
+                String userQuery =  "SELECT * FROM Notes WHERE Title LIKE '%"+input+"%'";
                 updateListView(userQuery, false);
             }
         });
-
-        //@TODO GIVE CODE TO SAM FOR CATEGORIES TAB
-/*        // Get distinct categories
-        String colQuery = "SELECT DISTINCT(category) FROM notes";
-        Cursor cursorCnotes = db.rawQuery(colQuery,null);
-        while (cursorCnotes.moveToNext()){
-            System.out.println(cursorCnotes.getString(cursorCnotes.getColumnIndex("category")));
-        }
-        // Close the cursor and database
-        cursorCnotes.close();
-        db.close();*/
     }
 
     public void updateListView(String query, Boolean DEFAULT) {
@@ -133,7 +117,8 @@ public class Search extends AppCompatActivity {
         }
         // user search case returns ALL notes with matching title
         else {
-            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Title = ?", new String[]{query});
+            //cursorNotes = db.rawQuery("SELECT * from Notes WHERE Title = ?", new String[]{query});
+            cursorNotes = db.rawQuery(query, null);
         }
 
         int noteCount = 0; // Track number of notes
@@ -171,7 +156,6 @@ public class Search extends AppCompatActivity {
                         new Intent(Search.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("NoteID", item.getNoteID());
-                System.out.println(item.getNoteID());
                 bundle.putString("Title", item.getTitle());
                 bundle.putString("Category", item.getCategory());
                 bundle.putString("StartDate", item.getStartDate());

@@ -141,12 +141,10 @@ public class MainActivity extends AppCompatActivity {
 
         // If there is a bundle from Search, extract the data
         try {
-            System.out.println("In try loop");
             Bundle bundle;
             bundle = this.getIntent().getExtras();
             noteID = bundle.getString("NoteID");
             NoteID = Integer.parseInt(noteID);
-            System.out.println(NoteID);
             SearchTitle = bundle.getString("Title");
             String Category = bundle.getString("Category");
             String StartDate = bundle.getString("StartDate");
@@ -386,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
 
         if (!NoteID.equals(0)) {
-            System.out.println("In the correct loop");
             db.delete("Notes", "NoteID = ?", new String[]{noteID});
             try {
                 File file = new File(FilePath);

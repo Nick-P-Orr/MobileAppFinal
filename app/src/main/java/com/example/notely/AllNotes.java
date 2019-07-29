@@ -149,7 +149,6 @@ public class AllNotes extends AppCompatActivity {
                         new Intent(AllNotes.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("NoteID", item.getNoteID());
-                System.out.println(item.getNoteID());
                 bundle.putString("Title", item.getTitle());
                 bundle.putString("Category", item.getCategory());
                 bundle.putString("StartDate", item.getStartDate());
