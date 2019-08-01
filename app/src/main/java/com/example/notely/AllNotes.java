@@ -135,30 +135,10 @@ public class AllNotes extends AppCompatActivity {
         cursorNotes.close();
         db.close();
         // Create ListItemAdapter
-        ListItemAdapter adapter = new ListItemAdapter(this, 0, list);
+        ListItemAdapter adapter = new ListItemAdapter(list, this);
         // Assign ListItemAdapter to ListView
         final ListView listView = findViewById(R.id.noteListView);
         listView.setAdapter(adapter);
-
-        // Make list view items clickable and open note in mainActivity
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListItem item = (ListItem) parent.getItemAtPosition(position);
-                Intent intent =
-                        new Intent(AllNotes.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("NoteID", item.getNoteID());
-                bundle.putString("Title", item.getTitle());
-                bundle.putString("Category", item.getCategory());
-                bundle.putString("StartDate", item.getStartDate());
-                bundle.putString("EndDate", item.getEndDate());
-                bundle.putString("FilePath", item.getFilePath());
-                bundle.putString("LastEdit", item.getLastEdit());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
     }
 
     public void switchActivity(int activity) {

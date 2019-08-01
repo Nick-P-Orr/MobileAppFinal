@@ -1,60 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="80dip"
         android:layout_height="80dip" />
 
-        <TextView
-            android:id="@+id/title1"
-            android:layout_toRightOf="@id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/image"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/category1"
-            android:layout_below="@id/title1"
-            android:layout_toRightOf="@id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/category1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title1"
+        android:layout_toRightOf="@id/image"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/startDate1"
-            android:layout_toRightOf="@id/image"
-            android:layout_below="@id/category1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/startDate1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/category1"
+        android:layout_toRightOf="@id/image"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/endDate1"
-            android:layout_toRightOf="@id/image"
-            android:layout_below="@id/startDate1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/endDate1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startDate1"
+        android:layout_toRightOf="@id/image"
+        android:textSize="14sp" />
 
     <Button
-        android:id="@+id/delete_btn"
+        android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        android:text="Delete" />
+        android:drawableLeft="@drawable/ic_delete"
+        android:text="Delete"
+        android:textSize="10sp" />
 
-    <Button
-        android:id="@+id/add_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/delete_btn"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:text="Edit" />
 </RelativeLayout>

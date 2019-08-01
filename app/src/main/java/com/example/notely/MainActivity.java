@@ -61,10 +61,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = getSupportActionBar();
-
         // load the Note_first fragment by default
         toolbar.setTitle("Notely");
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
@@ -73,34 +71,34 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int switchcase = 0;
-                            switch (item.getItemId()) {
-                                case R.id.navigation_home:
-                                    //NEW NOTES
-                                    switchcase = -1;
-                                    toolbar.setTitle("Notely");
-                                    break;
-                                case R.id.navigation_allnotes:
-                                    //ALL NOTES
-                                    toolbar.setTitle("All Notes");
-                                    switchcase = 2;
-                                    break;
-                                case R.id.navigation_categories:
-                                    //CATEGORIES
-                                    toolbar.setTitle("Categories");
-                                    switchcase = 3;
-                                    break;
-                                case R.id.navigation_search:
-                                    //SEARCH
-                                    toolbar.setTitle("Search");
-                                    switchcase = 0;
-                                    break;
-                                case R.id.navigation_setting:
-                                    //SETTINGS
-                                    toolbar.setTitle("Settings");
-                                    switchcase = 1;
-                                    break;
-                            }
-                        if(switchcase == -1)
+                        switch (item.getItemId()) {
+                            case R.id.navigation_home:
+                                //NEW NOTES
+                                switchcase = -1;
+                                toolbar.setTitle("Notely");
+                                break;
+                            case R.id.navigation_allnotes:
+                                //ALL NOTES
+                                toolbar.setTitle("All Notes");
+                                switchcase = 2;
+                                break;
+                            case R.id.navigation_categories:
+                                //CATEGORIES
+                                toolbar.setTitle("Categories");
+                                switchcase = 3;
+                                break;
+                            case R.id.navigation_search:
+                                //SEARCH
+                                toolbar.setTitle("Search");
+                                switchcase = 0;
+                                break;
+                            case R.id.navigation_setting:
+                                //SETTINGS
+                                toolbar.setTitle("Settings");
+                                switchcase = 1;
+                                break;
+                        }
+                        if (switchcase == -1)
                             return true;
                         if (unsavedChanges)
                             savePrompt(switchcase);
@@ -296,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button save = findViewById(R.id.save_note);
 
-        //@TODO Buttons for testing, must be updated
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,7 +302,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //@TODO
     public void switchActivity(int activity) {
         Intent intent = new Intent(this, MainActivity.class);
         switch (activity) {
@@ -358,6 +354,23 @@ public class MainActivity extends AppCompatActivity {
         String FILE_NAME = titleEditText.getText().toString();
         String title = FILE_NAME;
         FILE_NAME = FILE_NAME.replaceAll(" ", "_");
+
+        if (title.equals("Make data")) {
+            makeTestData();
+            switchActivity(0);
+        }
+
+        if (title.equals("Delete data")) {
+            // Set the path and database name
+            String path = "/data/data/" + getPackageName() + "/Notely.db";
+            // Open the database. If it doesn't exist, create it.
+            SQLiteDatabase db;
+            db = SQLiteDatabase.openOrCreateDatabase(path, null);
+            db.execSQL("delete from " + "Notes");
+            db.close();
+            switchActivity(0);
+        }
+
         if (FILE_NAME.isEmpty()) {
             titleEditText.setError("Title cannot be empty");
             return;
@@ -430,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             outStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
             outStream.write(text.getBytes());
-            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
+            Toast.makeText(this, title + " Saved!",
                     Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -467,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (DEFAULT) {
             // switch to search activity
-            switchActivity(1);
+            switchActivity(0);
         }
     }
 
@@ -500,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 outStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
                 outStream.write(text.getBytes());
-                Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
+                Toast.makeText(this, title + " Saved!",
                         Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

@@ -61,9 +61,9 @@ public class Categories extends AppCompatActivity {
                     }
                 });
 
-    // Get distinct categories
+        // Get distinct categories
         String colQuery = "SELECT DISTINCT(category) FROM notes";
-        updateListView(colQuery );
+        updateListView(colQuery);
 
     }
 
@@ -96,24 +96,10 @@ public class Categories extends AppCompatActivity {
         cursorNotes.close();
         db.close();
         // Create ListItemAdapter
-        CategoryListAdapter adapter = new CategoryListAdapter(this, 0, list);
+        CategoryListAdapter adapter = new CategoryListAdapter(list, this);
         // Assign ListItemAdapter to ListView
         final ListView listView = findViewById(R.id.noteListView);
         listView.setAdapter(adapter);
-
-        // Make list view items clickable and open note in mainActivity
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               CategoryListItem item = (CategoryListItem) parent.getItemAtPosition(position);
-                Intent intent =
-                        new Intent(Categories.this, IndividualCategory.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("Category", item.getCategory());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
     }
 
     public void switchActivity(int activity) {
