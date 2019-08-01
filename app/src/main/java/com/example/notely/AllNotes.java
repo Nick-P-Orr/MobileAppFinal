@@ -88,7 +88,7 @@ public class AllNotes extends AppCompatActivity {
 
                 } else if (selected.equals("Last Edit Ascending")) {
                     updatedQuery = "SELECT * FROM notes ORDER BY lastedit ASC";
-                } else if (selected.equals("Calendar View")){
+                } else if (selected.equals("Calendar View")) {
                     switchActivity(4);
                 }
                 updateListView(updatedQuery);
@@ -158,7 +158,7 @@ public class AllNotes extends AppCompatActivity {
             case (3):
                 intent = new Intent(this, Categories.class);
                 break;
-            case(4):
+            case (4):
                 intent = new Intent(this, Calendar.class);
                 break;
         }

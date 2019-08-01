@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,12 @@ import java.util.List;
 public class IndividualCategory extends AppCompatActivity {
     @TargetApi(27)
     private ActionBar toolbar;
+    String Category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allnotes);
+        setContentView(R.layout.activity_individual_category);
 
         toolbar = getSupportActionBar();
 
@@ -68,13 +70,44 @@ public class IndividualCategory extends AppCompatActivity {
 
         Bundle bundle;
         bundle = this.getIntent().getExtras();
-        String Category = bundle.getString("Category");
+        Category = bundle.getString("Category");
         toolbar.setTitle(Category);
-        updateListView(Category);
+        updateListView(Category, 0);
+
+
+        Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
+        sortingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+                int i = 0;
+                if (selected.equals("Title Descending")) {
+                   i = 0;
+
+                } else if (selected.equals("Title Ascending")) {
+                    i = 1;
+
+                } else if (selected.equals("Last Edit Descending")) {
+                    i = 2;
+
+                } else if (selected.equals("Last Edit Ascending")) {
+                    i = 3;
+                } else if (selected.equals("Calendar View")){
+                    switchActivity(5);
+                }
+                updateListView(Category, i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Another interface callback
+            }
+        });
+
 
     }
 
-    public void updateListView(String query) {
+    public void updateListView(String query, int i) {
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
         // Open the database. If it doesn't exist, create it.
@@ -89,8 +122,14 @@ public class IndividualCategory extends AppCompatActivity {
         // Create Cursor to traverse notes
         Cursor cursorNotes;
 
-        cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ?", new String[]{query});
-
+        if(i == 0)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY Title DESC", new String[]{query});
+        else if(i == 1)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY Title ASC", new String[]{query});
+        else if(i == 2)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY lastedit DESC", new String[]{query});
+        else
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY lastedit ASC", new String[]{query});
         // Create items of notes and add them to list
         while (cursorNotes.moveToNext()) {
             ListItem item = new ListItem();
@@ -131,6 +170,12 @@ public class IndividualCategory extends AppCompatActivity {
                 break;
             case (4):
                 intent = new Intent(this, AllNotes.class);
+                break;
+            case (5):
+                intent = new Intent(this, Calendar.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("Category", Category);
+                intent.putExtras(bundle);
                 break;
         }
         startActivity(intent);

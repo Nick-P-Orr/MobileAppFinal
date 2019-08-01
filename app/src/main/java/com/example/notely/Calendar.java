@@ -23,6 +23,7 @@ import java.util.List;
 
 public class Calendar extends AppCompatActivity {
     String input = "";
+    String category = "";
     int toggle = 0;
     private ActionBar toolbar;
 
@@ -31,10 +32,24 @@ public class Calendar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         toolbar = getSupportActionBar();
-        toolbar.setTitle("Calendar");
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
+
+        try {
+            Bundle bundle;
+            bundle = this.getIntent().getExtras();
+            category = bundle.getString("Category");
+        } catch (NullPointerException e) {
+        }
+
+        if(!category.isEmpty()) {
+            toolbar.setTitle("Calendar - " + category);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_categories);
+        }
+        else {
+            toolbar.setTitle("Calendar - All Notes");
+            bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
+        }
+
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -45,7 +60,8 @@ public class Calendar extends AppCompatActivity {
                                 switchActivity(2);
                                 break;
                             case R.id.navigation_allnotes:
-                                //ALL NOTES
+                                toolbar.setTitle("All Notes");
+                                switchActivity(3);
                                 break;
                             case R.id.navigation_categories:
                                 toolbar.setTitle("Categories");
@@ -69,7 +85,7 @@ public class Calendar extends AppCompatActivity {
         toggleDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle == 0)
+                if (toggle == 0)
                     toggle = 1;
                 else
                     toggle = 0;
@@ -83,7 +99,7 @@ public class Calendar extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month,
                                             int dayOfMonth) {
                 String slash = "/";
-                input = (month+1) + slash + dayOfMonth + slash + year;
+                input = (month + 1) + slash + dayOfMonth + slash + year;
                 System.out.println(input);
                 updateListView(input, toggle);
             }
@@ -91,7 +107,7 @@ public class Calendar extends AppCompatActivity {
     }
 
     public void updateListView(String input, int toggle) {
-        if(input.isEmpty())
+        if (input.isEmpty())
             return;
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
@@ -107,8 +123,13 @@ public class Calendar extends AppCompatActivity {
         // Create Cursor to traverse notes
         Cursor cursorNotes;
 
-        if(toggle == 0)
-            cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartDate = ?", new String[]{input});
+        if (toggle == 0)
+            if (!category.isEmpty())
+                cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartDate = ? and Category = ?", new String[]{input, category});
+            else
+                cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartDate = ?", new String[]{input});
+        else if (!category.isEmpty())
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndDate = ? and Category = ?", new String[]{input, category});
         else
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndDate = ?", new String[]{input});
 
