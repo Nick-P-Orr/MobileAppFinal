@@ -491,14 +491,14 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
 
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i < 32; i++) {
             //Ensure that all required fields are populated
             String FILE_NAME = "Test Note " + i;
             String title = FILE_NAME;
             FILE_NAME = FILE_NAME.replaceAll(" ", "_");
             String category_text = "Test";
-            String start_date = "7/19/19";
-            String end_Date = "7/28/19";
+            String start_date = "7/"+ i +"/2019";
+            String end_Date = "8/"+ i +"/2019";
 
             // Add date to file name
             Date date = new Date();

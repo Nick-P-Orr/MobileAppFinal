@@ -16,5 +16,6 @@
         <item>Title Ascending</item>
         <item>Last Edit Descending</item>
         <item>Last Edit Ascending</item>
+        <item>Calendar View</item>
     </string-array>
 </resources>

@@ -1,12 +1,21 @@
 package com.example.notely;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Settings extends AppCompatActivity {
 

@@ -1,6 +1,5 @@
 package com.example.notely;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,25 +12,26 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.CalendarView;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.Switch;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class AllNotes extends AppCompatActivity {
-
-    @TargetApi(27)
+public class Calendar extends AppCompatActivity {
+    String input = "";
+    int toggle = 0;
     private ActionBar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allnotes);
-
+        setContentView(R.layout.activity_calendar);
         toolbar = getSupportActionBar();
-        toolbar.setTitle("All Notes");
+        toolbar.setTitle("Calendar");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
@@ -41,16 +41,15 @@ public class AllNotes extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
-                                toolbar.setTitle("Notely");
+                                toolbar.setTitle("Notes");
                                 switchActivity(2);
                                 break;
                             case R.id.navigation_allnotes:
                                 //ALL NOTES
                                 break;
                             case R.id.navigation_categories:
-                                //SUBJECTS
                                 toolbar.setTitle("Categories");
-                                switchActivity(3);
+                                switchActivity(1);
                                 break;
                             case R.id.navigation_search:
                                 //SEARCH
@@ -58,7 +57,6 @@ public class AllNotes extends AppCompatActivity {
                                 switchActivity(0);
                                 break;
                             case R.id.navigation_setting:
-                                //SETTINGS
                                 toolbar.setTitle("Settings");
                                 switchActivity(1);
                                 break;
@@ -67,42 +65,34 @@ public class AllNotes extends AppCompatActivity {
                     }
                 });
 
-        //Create query to select notes by most recent edit date
-        String query = "SELECT * FROM notes ORDER BY title DESC";
-        updateListView(query);
-
-        Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
-        sortingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Switch toggleDate = findViewById(R.id.switch2);
+        toggleDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = (String) parent.getItemAtPosition(position);
-                String updatedQuery = "SELECT * FROM notes ORDER BY title DESC";
-                if (selected.equals("Title Descending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY title DESC";
-
-                } else if (selected.equals("Title Ascending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY title ASC";
-
-                } else if (selected.equals("Last Edit Descending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY lastedit DESC";
-
-                } else if (selected.equals("Last Edit Ascending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY lastedit ASC";
-                } else if (selected.equals("Calendar View")){
-                    switchActivity(4);
-                }
-                updateListView(updatedQuery);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Another interface callback
+            public void onClick(View v) {
+                if(toggle == 0)
+                    toggle = 1;
+                else
+                    toggle = 0;
+                updateListView(input, toggle);
             }
         });
 
+        CalendarView myCalendar = findViewById(R.id.calendarView2); // get the reference of CalendarView
+        myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                String slash = "/";
+                input = (month+1) + slash + dayOfMonth + slash + year;
+                System.out.println(input);
+                updateListView(input, toggle);
+            }
+        });
     }
 
-    public void updateListView(String query) {
+    public void updateListView(String input, int toggle) {
+        if(input.isEmpty())
+            return;
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
         // Open the database. If it doesn't exist, create it.
@@ -117,8 +107,10 @@ public class AllNotes extends AppCompatActivity {
         // Create Cursor to traverse notes
         Cursor cursorNotes;
 
-        // default case populates the list view with the last 10 edited items
-        cursorNotes = db.rawQuery(query, null);
+        if(toggle == 0)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartDate = ?", new String[]{input});
+        else
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndDate = ?", new String[]{input});
 
         // Create items of notes and add them to list
         while (cursorNotes.moveToNext()) {
@@ -150,18 +142,16 @@ public class AllNotes extends AppCompatActivity {
                 intent = new Intent(this, Search.class);
                 break;
             case (1):
-                intent = new Intent(this, Settings.class);
+                intent = new Intent(this, Categories.class);
                 break;
             case (2):
                 intent = new Intent(this, MainActivity.class);
                 break;
             case (3):
-                intent = new Intent(this, Categories.class);
-                break;
-            case(4):
-                intent = new Intent(this, Calendar.class);
+                intent = new Intent(this, AllNotes.class);
                 break;
         }
         startActivity(intent);
     }
+
 }
