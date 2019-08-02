@@ -1,10 +1,12 @@
 package com.example.notely;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,18 +14,30 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.Switch;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Calendar extends AppCompatActivity {
     String input = "";
     String category = "";
     int toggle = 0;
     private ActionBar toolbar;
+    ArrayList<Date> startEventsCreated = new ArrayList<>();
+    ArrayList<Date> endEventsCreated = new ArrayList<>();
+    CompactCalendarView compactCalendar;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy");
+    Date currentDateSelection;
+    private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatEvent = new SimpleDateFormat("M/yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +53,43 @@ public class Calendar extends AppCompatActivity {
         } catch (NullPointerException e) {
         }
 
-        if(!category.isEmpty()) {
-            toolbar.setTitle("Calendar - " + category);
+        compactCalendar = findViewById(R.id.compactcalendar_view); // get the reference of CalendarView
+        compactCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                currentDateSelection = dateClicked;
+                input = dateFormat.format(dateClicked);
+                System.out.println(input);
+                updateListView(input, toggle);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                currentDateSelection = firstDayOfNewMonth;
+                if (!category.isEmpty()) {
+                    toolbar.setTitle(category + ": " + dateFormatMonth.format(firstDayOfNewMonth));
+                } else
+                    toolbar.setTitle("All Notes: " + dateFormatMonth.format(firstDayOfNewMonth));
+                updateListView(dateFormat.format(firstDayOfNewMonth), toggle);
+                createEvents(dateFormatEvent.format(firstDayOfNewMonth));
+            }
+        });
+
+        Date date = new Date();
+        currentDateSelection = date;
+        String title = dateFormatMonth.format(date);
+
+        if (!category.equals("")) {
+            toolbar.setTitle(category + ": " + title);
             bottomNavigationView.setSelectedItemId(R.id.navigation_categories);
-        }
-        else {
-            toolbar.setTitle("Calendar - All Notes");
+        } else {
+            toolbar.setTitle("All Notes: " + title);
             bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
         }
+
+        createEvents(dateFormatEvent.format(date));
+        updateListView(dateFormat.format(currentDateSelection), toggle);
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,25 +126,20 @@ public class Calendar extends AppCompatActivity {
         toggleDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (toggle == 0)
+                compactCalendar.removeAllEvents();
+                startEventsCreated.clear();
+                endEventsCreated.clear();
+                if (toggle == 0) {
                     toggle = 1;
-                else
+                } else {
                     toggle = 0;
+                }
                 updateListView(input, toggle);
+                createEvents(dateFormatEvent.format(currentDateSelection));
             }
         });
 
-        CalendarView myCalendar = findViewById(R.id.compactcalendar_view); // get the reference of CalendarView
-        myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,
-                                            int dayOfMonth) {
-                String slash = "/";
-                input = (month + 1) + slash + dayOfMonth + slash + year;
-                System.out.println(input);
-                updateListView(input, toggle);
-            }
-        });
+
     }
 
     public void updateListView(String input, int toggle) {
@@ -122,11 +160,11 @@ public class Calendar extends AppCompatActivity {
         Cursor cursorNotes;
 
         if (toggle == 0)
-            if (!category.isEmpty())
+            if (!category.equals(""))
                 cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartDate = ? and Category = ?", new String[]{input, category});
             else
                 cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartDate = ?", new String[]{input});
-        else if (!category.isEmpty())
+        else if (!category.equals(""))
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndDate = ? and Category = ?", new String[]{input, category});
         else
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndDate = ?", new String[]{input});
@@ -152,6 +190,66 @@ public class Calendar extends AppCompatActivity {
         // Assign ListItemAdapter to ListView
         final ListView listView = findViewById(R.id.noteListView);
         listView.setAdapter(adapter);
+    }
+
+
+    public void createEvents(String MY) {
+        String path = "/data/data/" + getPackageName() + "/Notely.db";
+        // Open the database. If it doesn't exist, create it.
+        SQLiteDatabase db;
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        // Create Cursor to traverse notes
+        Cursor cursorNotes;
+        String task;
+        String SE;
+        int color;
+        if (toggle == 0) {
+            task = " Started";
+            color = Color.GREEN;
+            SE = "StartDate";
+            if (!category.equals(""))
+                cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartMonthYear = ? and Category = ?", new String[]{MY, category});
+            else
+                cursorNotes = db.rawQuery("SELECT * from Notes WHERE StartMonthYear = ?", new String[]{MY});
+        } else {
+            task = " Due";
+            color = Color.RED;
+            SE = "EndDate";
+            if (!category.equals("")) {
+                cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndMonthYear = ? and Category = ?", new String[]{MY, category});
+            } else {
+                cursorNotes = db.rawQuery("SELECT * from Notes WHERE EndMonthYear = ?", new String[]{MY});
+            }
+        }
+
+        while (cursorNotes.moveToNext()) {
+            System.out.println("In movetonext Loop");
+            String title = cursorNotes.getString(cursorNotes.getColumnIndex("Title"));
+            String EventDate = cursorNotes.getString(cursorNotes.getColumnIndex(SE));
+            Date date;
+            try {
+                date = dateFormat.parse(EventDate);
+                if (SE.equals("EndDate")) {
+                    if (endEventsCreated.contains(date))
+                        return;
+                    endEventsCreated.add(date);
+                } else {
+                    if (startEventsCreated.contains(date))
+                        return;
+                    startEventsCreated.add(date);
+                }
+            } catch (java.text.ParseException E) {
+                break;
+            }
+            Long time = date.getTime();
+            Event ev1 = new Event(color, time, title + task);
+            compactCalendar.addEvent(ev1);
+        }
+
+        // Close the cursor and database
+        cursorNotes.close();
+        db.close();
+
     }
 
     public void switchActivity(int activity) {

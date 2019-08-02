@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView category; // Category
     private TextView startDate; // Start date text
     private TextView endDate; // End date text
+    String StartMY; // Start Month Year
+    String EndMY; // End Month Year
     String noteID; // String NoteID
     Integer NoteID; // Integer NoteID
     String FilePath; // File path of opened file if editing
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     DatePickerDialog picker; // Used to select date on start/end date click
     SimpleDateFormat fileDateFormat = new SimpleDateFormat("_yyyy_MM_dd_HH_mm_ss"); // Date format for file name
     SimpleDateFormat editDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Date format for last edit
+    SimpleDateFormat monthYear = new SimpleDateFormat("M/yyyy");
 
 
     @Override
@@ -128,11 +131,10 @@ public class MainActivity extends AppCompatActivity {
         endDate.setShowSoftInputOnFocus(false);
         startDate.setShowSoftInputOnFocus(false);
 
-        //db.execSQL("DROP TABLE IF EXISTS Notes");
 
         // Create a table - notes
         String sql = "CREATE TABLE IF NOT EXISTS Notes" +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, NoteID TEXT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, FilePath TEXT, LastEdit TEXT);";
+                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, NoteID TEXT, Title TEXT, Category TEXT, StartDate TEXT, EndDate TEXT, StartMonthYear TEXT, EndMonthYear TEXT, FilePath TEXT, LastEdit TEXT);";
         db.execSQL(sql);
         // Close DB
         db.close();
@@ -366,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
             // Open the database. If it doesn't exist, create it.
             SQLiteDatabase db;
             db = SQLiteDatabase.openOrCreateDatabase(path, null);
-            db.execSQL("delete from " + "Notes");
+            db.execSQL("DROP TABLE IF EXISTS Notes");
             db.close();
             switchActivity(0);
         }
@@ -463,6 +465,17 @@ public class MainActivity extends AppCompatActivity {
         String path = getFilesDir() + "/" + FILE_NAME;
         String lastEdit = editDateFormat.format(date);
 
+        int one = end_Date.indexOf("/");
+        int two = end_Date.lastIndexOf("/");
+        EndMY = end_Date.substring(0,one);
+        EndMY = EndMY + end_Date.substring(two);
+
+        int One = start_date.indexOf("/");
+        int Two = start_date.lastIndexOf("/");
+        StartMY = start_date.substring(0,One);
+        StartMY = StartMY + start_date.substring(Two);
+
+
         // Add data to ContentValues
         ContentValues values = new ContentValues();
         values.put("NoteID", noteID);
@@ -472,6 +485,8 @@ public class MainActivity extends AppCompatActivity {
         values.put("EndDate", end_Date);
         values.put("FilePath", path);
         values.put("LastEdit", lastEdit);
+        values.put("StartMonthYear", StartMY);
+        values.put("EndMonthYear", EndMY);
         String table = "Notes";
         // Add entry to DB
         db.insert(table, null, values);
@@ -499,6 +514,8 @@ public class MainActivity extends AppCompatActivity {
             String category_text = "Test";
             String start_date = "7/"+ i +"/2019";
             String end_Date = "8/"+ i +"/2019";
+            String start_my = "7/2019";
+            String end_my = "8/2019";
 
             // Add date to file name
             Date date = new Date();
@@ -539,6 +556,8 @@ public class MainActivity extends AppCompatActivity {
             values.put("Category", category_text);
             values.put("StartDate", start_date);
             values.put("EndDate", end_Date);
+            values.put("StartMonthYear", start_my);
+            values.put("EndMonthYear", end_my);
             values.put("FilePath", path);
             values.put("LastEdit", lastEdit);
             String table = "Notes";
