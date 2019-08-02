@@ -16,9 +16,7 @@ import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.Switch;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Calendar extends AppCompatActivity {
@@ -93,7 +91,7 @@ public class Calendar extends AppCompatActivity {
             }
         });
 
-        CalendarView myCalendar = findViewById(R.id.calendarView2); // get the reference of CalendarView
+        CalendarView myCalendar = findViewById(R.id.compactcalendar_view); // get the reference of CalendarView
         myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month,
