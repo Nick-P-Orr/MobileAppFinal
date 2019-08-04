@@ -41,6 +41,7 @@ public class Calendar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_calendar);
         toolbar = getSupportActionBar();
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
