@@ -20,21 +20,21 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllNotes extends AppCompatActivity {
-
+public class IndividualCategory extends AppCompatActivity {
     @TargetApi(27)
     private ActionBar toolbar;
+    String Category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allnotes);
+        setContentView(R.layout.activity_individual_category);
 
         toolbar = getSupportActionBar();
-        toolbar.setTitle("All Notes");
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_categories);
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -45,7 +45,8 @@ public class AllNotes extends AppCompatActivity {
                                 switchActivity(2);
                                 break;
                             case R.id.navigation_allnotes:
-                                //ALL NOTES
+                                toolbar.setTitle("All Notes");
+                                switchActivity(4);
                                 break;
                             case R.id.navigation_categories:
                                 //SUBJECTS
@@ -67,31 +68,34 @@ public class AllNotes extends AppCompatActivity {
                     }
                 });
 
-        //Create query to select notes by most recent edit date
-        String query = "SELECT * FROM notes ORDER BY title DESC";
-        updateListView(query);
+        Bundle bundle;
+        bundle = this.getIntent().getExtras();
+        Category = bundle.getString("Category");
+        toolbar.setTitle(Category);
+        updateListView(Category, 0);
+
 
         Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
         sortingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = (String) parent.getItemAtPosition(position);
-                String updatedQuery = "SELECT * FROM notes ORDER BY title DESC";
+                int i = 0;
                 if (selected.equals("Title Descending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY title DESC";
+                   i = 0;
 
                 } else if (selected.equals("Title Ascending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY title ASC";
+                    i = 1;
 
                 } else if (selected.equals("Last Edit Descending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY lastedit DESC";
+                    i = 2;
 
                 } else if (selected.equals("Last Edit Ascending")) {
-                    updatedQuery = "SELECT * FROM notes ORDER BY lastedit ASC";
-                } else if (selected.equals("Calendar View")) {
-                    switchActivity(4);
+                    i = 3;
+                } else if (selected.equals("Calendar View")){
+                    switchActivity(5);
                 }
-                updateListView(updatedQuery);
+                updateListView(Category, i);
             }
 
             @Override
@@ -100,9 +104,10 @@ public class AllNotes extends AppCompatActivity {
             }
         });
 
+
     }
 
-    public void updateListView(String query) {
+    public void updateListView(String query, int i) {
         // Set the path and database name
         String path = "/data/data/" + getPackageName() + "/Notely.db";
         // Open the database. If it doesn't exist, create it.
@@ -117,9 +122,14 @@ public class AllNotes extends AppCompatActivity {
         // Create Cursor to traverse notes
         Cursor cursorNotes;
 
-        // default case populates the list view with the last 10 edited items
-        cursorNotes = db.rawQuery(query, null);
-
+        if(i == 0)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY Title DESC", new String[]{query});
+        else if(i == 1)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY Title ASC", new String[]{query});
+        else if(i == 2)
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY lastedit DESC", new String[]{query});
+        else
+            cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY lastedit ASC", new String[]{query});
         // Create items of notes and add them to list
         while (cursorNotes.moveToNext()) {
             ListItem item = new ListItem();
@@ -159,9 +169,16 @@ public class AllNotes extends AppCompatActivity {
                 intent = new Intent(this, Categories.class);
                 break;
             case (4):
+                intent = new Intent(this, AllNotes.class);
+                break;
+            case (5):
                 intent = new Intent(this, Calendar.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("Category", Category);
+                intent.putExtras(bundle);
                 break;
         }
         startActivity(intent);
     }
 }
+

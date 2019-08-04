@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Search">
+    android:layout_height="match_parent">
+    tools:context="example.javatpoint.com.optionmenu.MainActivity">
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"
@@ -13,33 +14,32 @@
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noteListView"
+        app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_nav_menu" />
-
-    <EditText
-        android:id="@+id/searchBar"
-        android:layout_width="360dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="2dp"
-        android:hint="Search"
-        app:layout_constraintBottom_toTopOf="@+id/noteListView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <ListView
         android:id="@+id/noteListView"
-        android:layout_width="0dp"
+        android:layout_width="412dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        android:layout_marginBottom="58dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sorting_spinner" />
+
+    <Spinner
+        android:id="@+id/sorting_spinner"
+        android:layout_width="409dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="1dp"
+        android:entries="@array/order_list"
+        app:layout_constraintBottom_toTopOf="@+id/noteListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
