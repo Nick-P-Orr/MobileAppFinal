@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Notely</string>
     <string name="title_notes">Notes</string>
-    <string name="title_subjects">Subjects</string>
+    <string name="title_subjects">Categories</string>
     <string name="title_takeNote">New Note</string>
     <string name="title_settings">Settings</string>
     <string name="title_search">Search</string>
@@ -11,6 +11,10 @@
     <string name="completion_date">Completion Date</string>
     <string name="written_date">Written Date</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="order_list">
+        <item>Title Descending</item>
+        <item>Title Ascending</item>
+        <item>Last Edit Descending</item>
+        <item>Last Edit Ascending</item>
+    </string-array>
 </resources>

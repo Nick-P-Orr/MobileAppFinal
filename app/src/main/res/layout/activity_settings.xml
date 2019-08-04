@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Setting">
+    android:background="?attr/backgroundColor">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_format_btn"
+        app:menu="@menu/bottom_nav_menu" />
 
     <Button
         android:id="@+id/color_scheme_btn"
@@ -18,13 +28,13 @@
         android:layout_marginRight="14dp"
         android:layout_marginBottom="24dp"
         android:text="Color Scheme"
-        app:layout_constraintBottom_toTopOf="@+id/font"
+        app:layout_constraintBottom_toTopOf="@+id/change_font"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/font"
+        android:id="@+id/change_font"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="14dp"
@@ -46,27 +56,12 @@
         android:layout_marginLeft="14dp"
         android:layout_marginEnd="14dp"
         android:layout_marginRight="14dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="320dp"
         android:text="Date Format"
-        app:layout_constraintBottom_toTopOf="@+id/share_btn"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/font" />
-
-    <Button
-        android:id="@+id/share_btn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
-        android:layout_marginBottom="257dp"
-        android:text="Share"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_format_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/change_font" />
 
 
 </android.support.constraint.ConstraintLayout>
