@@ -1,73 +1,48 @@
 package com.example.notely;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
-public class Settings extends AppCompatActivity{
+public class ColorScheme extends AppCompatActivity{
 
+    @TargetApi(27)
     private ActionBar toolbar;
-    private TextView mTextMessage;
-    private static final String TAG = "MyActivity";
+    private Switch mySwitch;
+   // SharedPreferences sharedPreferences, app_preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            setTheme(R.style.DarkTheme);
+        }
+        else setTheme(R.style.LightTheme);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        Utils.onActivityCreateSetTheme(this);
+
+      //  app_preferences = PreferenceManager.getDefaultSharedPreferences(this);
+       // Utils.onActivityCreateSetTheme(this);
+        setContentView(R.layout.dark_mode);
+
         toolbar = getSupportActionBar();
-        toolbar.setTitle("Settings");
-
-        Button toFonts = (Button)findViewById(R.id.font);
-        Button toColorScheme = (Button)findViewById(R.id.color_scheme_btn);
-
-        toFonts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-
-                intent.setClass(Settings.this, ChangeFont.class);
-
-                Bundle bundle = new Bundle();
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
-
-        toColorScheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-
-                intent.setClass(Settings.this, ColorScheme.class);
-
-                Bundle bundle = new Bundle();
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
+        toolbar.setTitle("Theme");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_setting);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_allnotes);
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -79,13 +54,11 @@ public class Settings extends AppCompatActivity{
                                 break;
                             case R.id.navigation_allnotes:
                                 //ALL NOTES
-                                toolbar.setTitle("All Notes");
-                                switchActivity(3);
                                 break;
                             case R.id.navigation_categories:
                                 //SUBJECTS
                                 toolbar.setTitle("Categories");
-                                switchActivity(1);
+                                switchActivity(3);
                                 break;
                             case R.id.navigation_search:
                                 //SEARCH
@@ -93,21 +66,50 @@ public class Settings extends AppCompatActivity{
                                 switchActivity(0);
                                 break;
                             case R.id.navigation_setting:
+                                //SETTINGS
+                                toolbar.setTitle("Settings");
+                                switchActivity(1);
                                 break;
                         }
                         return true;
                     }
                 });
+
+        mySwitch=(Switch)findViewById(R.id.theme_switch);
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            mySwitch.setChecked(true);
+        }
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    restartApp();
+                }
+                else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    restartApp();
+
+                }
+            }
+        });
+
     }
+
+    public void restartApp() {
+        Intent i = new Intent(getApplicationContext(), ColorScheme.this.getClass());
+        startActivity(i);
+    }
+
 
     public void switchActivity(int activity) {
         Intent intent = new Intent(this, MainActivity.class);
         switch (activity) {
             case (0):
-                intent = new Intent(this, Search.class);
+                intent = new Intent(this, Categories.class);
                 break;
             case (1):
-                intent = new Intent(this, Categories.class);
+                intent = new Intent(this, Settings.class);
                 break;
             case (2):
                 intent = new Intent(this, MainActivity.class);
@@ -118,4 +120,7 @@ public class Settings extends AppCompatActivity{
         }
         startActivity(intent);
     }
+
 }
+
+

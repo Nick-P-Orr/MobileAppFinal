@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".TakeNote">
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
+        <Switch
+            android:id="@+id/theme_switch"
+            android:layout_width="210dp"
+            android:layout_height="47dp"
+            android:text="Dark Mode"
+            android:textSize="25dp"
+            tools:layout_editor_absoluteX="91dp"
+            tools:layout_editor_absoluteY="105dp" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
