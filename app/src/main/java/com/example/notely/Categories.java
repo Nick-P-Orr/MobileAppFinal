@@ -25,6 +25,7 @@ public class Categories extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_categories);
         toolbar = getSupportActionBar();
         toolbar.setTitle("Categories");

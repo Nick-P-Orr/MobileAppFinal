@@ -1,33 +1,53 @@
 package com.example.notely;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings extends AppCompatActivity {
+public class Settings extends AppCompatActivity{
 
     private ActionBar toolbar;
+    private TextView mTextMessage;
+    private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        Utils.onActivityCreateSetTheme(this);
         toolbar = getSupportActionBar();
         toolbar.setTitle("Settings");
+
+        Button toFonts = (Button)findViewById(R.id.font);
+
+        toFonts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+
+                intent.setClass(Settings.this, ChangeFont.class);
+
+                Bundle bundle = new Bundle();
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_setting);

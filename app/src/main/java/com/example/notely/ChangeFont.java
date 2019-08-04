@@ -19,7 +19,7 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Utils.onActivityCreateSetTheme(this);
+
 
         setContentView(R.layout.font_change);
 
@@ -36,31 +36,7 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
         findViewById(R.id.default_small).setOnClickListener(this);
         findViewById(R.id.default1).setOnClickListener(this);
         findViewById(R.id.default_large).setOnClickListener(this);
-        Button goback = (Button)findViewById(R.id.goto_main);
-
-        /*
-
-
-        Button robotoSmall = (Button)findViewById(R.id.roboto_small);
-        Button robotoDefault = (Button)findViewById(R.id.roboto_btn);
-        Button robotoLarge = (Button)findViewById(R.id.roboto_large);
-        Button sanssarifSmall = (Button)findViewById(R.id.sans_sarif_btn_small);
-        Button sanssarifDefault = (Button)findViewById(R.id.sans_sarif_btn_default);
-        Button sanssarifLarge = (Button)findViewById(R.id.sans_sarif_btn_large);
-
-        robotoSmall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("myApp", "Activity2 button is clicked");
-                Intent intent = new Intent();
-                intent.setClass(ChangeFont.this, ChangeFont.class);
-                setTheme(R.style.SmallRoboto);
-
-                startActivity(intent);
-
-
-            }
-            */
+        Button goback = (Button)findViewById(R.id.goto_Settings);
 
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +44,7 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
                 Log.v("myApp", "Activity2 button is clicked");
                 Intent intent = new Intent();
 
-                intent.setClass(ChangeFont.this, MainActivity.class);
+                intent.setClass(ChangeFont.this, Settings.class);
 
                 Bundle bundle = new Bundle();
 
