@@ -115,7 +115,7 @@ public class Calendar extends AppCompatActivity {
                                 break;
                             case R.id.navigation_setting:
                                 toolbar.setTitle("Settings");
-                                switchActivity(1);
+                                switchActivity(4);
                                 break;
                         }
                         return true;
@@ -266,6 +266,9 @@ public class Calendar extends AppCompatActivity {
                 break;
             case (3):
                 intent = new Intent(this, AllNotes.class);
+                break;
+            case (4):
+                intent = new Intent(this, Settings.class);
                 break;
         }
         startActivity(intent);
