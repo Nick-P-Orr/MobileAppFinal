@@ -9,7 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
@@ -63,6 +65,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
+
+        // Get text fields and set temp noteID
+        noteEditText = findViewById(R.id.note_field);
+        titleEditText = findViewById(R.id.title_field);
+        category = findViewById(R.id.category_field);
+        startDate = findViewById(R.id.start_date);
+        endDate = findViewById(R.id.completion_field);
+        NoteID = 0;
+        noteID = NoteID.toString();
+        Button save = findViewById(R.id.save_note);
+
+        if(Utils.getCurrentColorTheme().equals("Dark")){
+            noteEditText.setTextColor(Color.WHITE);
+            noteEditText.setHintTextColor(Color.WHITE);
+            titleEditText.setTextColor(Color.WHITE);
+            titleEditText.setHintTextColor(Color.WHITE);
+            category.setTextColor(Color.WHITE);
+            category.setHintTextColor(Color.WHITE);
+            startDate.setTextColor(Color.WHITE);
+            startDate.setHintTextColor(Color.WHITE);
+            endDate.setTextColor(Color.WHITE);
+            endDate.setHintTextColor(Color.WHITE);
+            save.setBackgroundColor(Color.DKGRAY);
+        }
 
         toolbar = getSupportActionBar();
         // load the Note_first fragment by default
@@ -119,14 +145,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
 
-        // Get text fields and set temp noteID
-        noteEditText = findViewById(R.id.note_field);
-        titleEditText = findViewById(R.id.title_field);
-        category = findViewById(R.id.category_field);
-        startDate = findViewById(R.id.start_date);
-        endDate = findViewById(R.id.completion_field);
-        NoteID = 0;
-        noteID = NoteID.toString();
+
 
         // Ensure keyboard doesn't popup on start/end date click
         endDate.setShowSoftInputOnFocus(false);
@@ -295,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        Button save = findViewById(R.id.save_note);
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +345,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void savePrompt(final int switchcase) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (Utils.getCurrentColorTheme().equals("Dark")){
+            builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        }
         builder.setMessage("WARNING! ANY WORK NOT SAVED WILL BE LOST! Save current note?");
         builder.setCancelable(false);
         builder.setPositiveButton(

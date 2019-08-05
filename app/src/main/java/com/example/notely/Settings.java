@@ -1,6 +1,7 @@
 package com.example.notely;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
@@ -71,12 +72,26 @@ public class Settings extends AppCompatActivity implements OnClickListener {
         Switch mySwitch;
         mySwitch = findViewById(R.id.dark_mode);
 
-        if(Utils.getCurrentColorTheme().equals("Dark"))
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
             themeColor = true;
-        else
+            mySwitch.setTextColor(Color.WHITE);
+
+            findViewById(R.id.roboto_small).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.roboto_large).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.roboto_btn).setBackgroundColor(Color.DKGRAY);
+
+            findViewById(R.id.sans_sarif_btn_small).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.sans_sarif_btn_default).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.sans_sarif_btn_large).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.default_small).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.default1).setBackgroundColor(Color.DKGRAY);
+            findViewById(R.id.default_large).setBackgroundColor(Color.DKGRAY);
+
+
+        } else
             themeColor = false;
 
-        if(themeColor)
+        if (themeColor)
             mySwitch.setChecked(true);
 
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -189,8 +204,9 @@ public class Settings extends AppCompatActivity implements OnClickListener {
     }
 
 
-    void setDark(){
+    void setDark() {
         lastClick = Utils.getCurrentTextTheme();
+        System.out.println(lastClick);
         switch (lastClick) {
             case 0:
                 if (themeColor)

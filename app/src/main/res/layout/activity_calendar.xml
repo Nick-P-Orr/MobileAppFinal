@@ -31,15 +31,14 @@
             android:layout_height="250dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            app:compactCalendarBackgroundColor="#00FFFFFF"
+            app:compactCalendarBackgroundColor="@color/dark_button"
             app:compactCalendarCurrentDayBackgroundColor="#5C1A3CE7"
             app:compactCalendarCurrentSelectedDayBackgroundColor="#727AA5FC"
+            app:compactCalendarEventIndicatorStyle="small_indicator"
             app:compactCalendarMultiEventIndicatorColor="#fff"
             app:compactCalendarTargetHeight="250dp"
-            app:compactCalendarTextColor="#000000"
+            app:compactCalendarTextColor="@color/white"
             app:compactCalendarTextSize="12sp"
-            app:compactCalendarEventIndicatorStyle="small_indicator"
-            app:layout_constraintBottom_toTopOf="@+id/switch2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,24 +47,37 @@
             android:id="@+id/noteListView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch2" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
-        <Switch
-            android:id="@+id/switch2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="9dp"
-            android:showText="true"
-            android:text="Find notes from: "
-            android:textOff="Start Date"
-            android:textOn="End Date "
-            app:layout_constraintBottom_toTopOf="@+id/noteListView"
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="181dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/compactcalendar_view" />
+            app:layout_constraintTop_toBottomOf="@+id/compactcalendar_view">
+
+            <RadioButton
+                android:id="@+id/radioButtonStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/start_date" />
+
+            <RadioButton
+                android:id="@+id/radioButtonEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/end_date" />
+        </RadioGroup>
+
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

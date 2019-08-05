@@ -8,6 +8,7 @@ public class Utils {
     public static int currentTextTheme;
     public static String currentColorTheme;
     private static int sTheme;
+    public static int currentTheme;
 
     public final static int THEME_RS = 0;
     public final static int THEME_RD = 1;
@@ -38,6 +39,10 @@ public class Utils {
         return currentColorTheme;
     }
 
+    public static int getCurrentTheme(){
+        return currentTheme;
+    }
+
     /**
      * Set the theme of the Activity, and restart it by creating a new Activity of the same type.
      */
@@ -53,13 +58,14 @@ public class Utils {
     public static void onActivityCreateSetTheme(Activity activity) {
 
         currentTextTheme = sTheme;
+        currentTheme = sTheme;
 
         if (sTheme >= 0 && sTheme <= 8)
             currentColorTheme = "Light";
 
-        if (sTheme >= 9 && sTheme <= 18) {
+        if (sTheme >= 10 && sTheme <= 18) {
             currentColorTheme = "Dark";
-            currentTextTheme = currentTextTheme - 9;
+            currentTextTheme = currentTextTheme - 10;
         }
 
         System.out.println(sTheme);

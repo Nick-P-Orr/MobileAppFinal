@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +140,8 @@ public class ListItemAdapter extends BaseAdapter implements ListAdapter {
 
         //Edit and Delete Buttons
         Button deleteButton = view.findViewById(R.id.delete_button);
+        if(Utils.getCurrentColorTheme().equals("Dark"))
+            deleteButton.setBackgroundColor(Color.DKGRAY);
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

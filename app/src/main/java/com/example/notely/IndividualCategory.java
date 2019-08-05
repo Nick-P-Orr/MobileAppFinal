@@ -77,6 +77,10 @@ public class IndividualCategory extends AppCompatActivity {
 
 
         Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
+        if(Utils.getCurrentColorTheme().equals("Dark")) {
+            sortingSpinner.setBackgroundResource(R.drawable.spinner_dark);
+            sortingSpinner.setPopupBackgroundResource(R.drawable.spinner_dark);
+        }
         sortingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

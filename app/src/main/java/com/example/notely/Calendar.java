@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.RadioButton;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -45,6 +45,13 @@ public class Calendar extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
         toolbar = getSupportActionBar();
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        RadioButton startDate = findViewById(R.id.radioButtonStart);
+        RadioButton endDate = findViewById(R.id.radioButtonEnd);
+
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
+            startDate.setTextColor(Color.WHITE);
+            endDate.setTextColor(Color.WHITE);
+        }
 
         try {
             Bundle bundle;
@@ -53,7 +60,14 @@ public class Calendar extends AppCompatActivity {
         } catch (NullPointerException e) {
         }
 
+        if (toggle == 0) {
+            startDate.setChecked(true);
+        }
+
         compactCalendar = findViewById(R.id.compactcalendar_view); // get the reference of CalendarView
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
+            compactCalendar.setCalendarBackgroundColor(Color.DKGRAY);
+        }
         compactCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
@@ -65,7 +79,7 @@ public class Calendar extends AppCompatActivity {
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                currentDateSelection = firstDayOfNewMonth;
+                // currentDateSelection = firstDayOfNewMonth;
                 if (!category.isEmpty()) {
                     toolbar.setTitle(category + ": " + dateFormatMonth.format(firstDayOfNewMonth));
                 } else
@@ -122,18 +136,26 @@ public class Calendar extends AppCompatActivity {
                     }
                 });
 
-        Switch toggleDate = findViewById(R.id.switch2);
-        toggleDate.setOnClickListener(new View.OnClickListener() {
+
+        startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 compactCalendar.removeAllEvents();
                 startEventsCreated.clear();
                 endEventsCreated.clear();
-                if (toggle == 0) {
-                    toggle = 1;
-                } else {
-                    toggle = 0;
-                }
+                toggle = 0;
+                updateListView(input, toggle);
+                createEvents(dateFormatEvent.format(currentDateSelection));
+            }
+        });
+
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compactCalendar.removeAllEvents();
+                startEventsCreated.clear();
+                endEventsCreated.clear();
+                toggle = 1;
                 updateListView(input, toggle);
                 createEvents(dateFormatEvent.format(currentDateSelection));
             }

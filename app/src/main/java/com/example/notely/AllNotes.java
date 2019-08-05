@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -73,6 +74,10 @@ public class AllNotes extends AppCompatActivity {
         updateListView(query);
 
         Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
+        if(Utils.getCurrentColorTheme().equals("Dark")) {
+            sortingSpinner.setBackgroundResource(R.drawable.spinner_dark);
+            sortingSpinner.setPopupBackgroundResource(R.drawable.spinner_dark);
+        }
         sortingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -82,6 +83,11 @@ public class CategoryListAdapter extends BaseAdapter implements ListAdapter {
         Button deleteButton = view.findViewById(R.id.delete_button);
         Button editButton = view.findViewById(R.id.rename_button);
 
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
+            deleteButton.setBackgroundColor(Color.DKGRAY);
+            editButton.setBackgroundColor(Color.DKGRAY);
+        }
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +114,11 @@ public class CategoryListAdapter extends BaseAdapter implements ListAdapter {
                 CategoryListItem item = (CategoryListItem) getItem(position);
                 final String Category = item.getCategory();
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                if (Utils.getCurrentColorTheme().equals("Dark")) {
+                    builder = new AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                }
+
                 builder.setTitle("Enter new Category");
                 builder.setCancelable(false);
 
@@ -132,6 +143,7 @@ public class CategoryListAdapter extends BaseAdapter implements ListAdapter {
                 });
 
                 builder.show();
+
             }
         });
 

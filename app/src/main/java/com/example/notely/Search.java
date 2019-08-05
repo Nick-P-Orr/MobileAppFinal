@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
@@ -75,6 +76,10 @@ public class Search extends AppCompatActivity {
 
         // Create search bar onclick  listener and string to hold input
         final EditText searchBar = findViewById(R.id.searchBar);
+        if(Utils.getCurrentColorTheme().equals("Dark")){
+            searchBar.setHintTextColor(Color.WHITE);
+            searchBar.setTextColor(Color.WHITE);
+        }
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
