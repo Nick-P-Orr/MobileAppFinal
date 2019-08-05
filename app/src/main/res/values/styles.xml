@@ -12,102 +12,199 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowAnimationStyle">@null</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="backgroundColor">#303030</item>
-        <item name="textColor">#FFFFFF</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
     </style>
 
     <style name="SmallSansSerif" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="DefaultSansSerif" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="LargeSansSerif" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="SmallRoboto" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">@font/robotolight</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="DefaultRoboto" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">@font/robotolight</item>
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="LargeRoboto" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">@font/robotolight</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="DefaultSmall" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="DefaultDefault" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="DefaultLarge" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="SmallSansSerifDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 
+    <style name="DefaultSansSerifDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="LargeSansSerifDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SmallRobotoDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">@font/robotolight</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="DefaultRobotoDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">@font/robotolight</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="LargeRobotoDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">@font/robotolight</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="DefaultSmallDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="DefaultDefaultDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="DefaultLargeDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="backgroundColor">#FF5722</item>
+        <item name="textColor">#9C27B0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

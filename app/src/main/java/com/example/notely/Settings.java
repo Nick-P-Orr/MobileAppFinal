@@ -11,17 +11,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings extends AppCompatActivity{
+public class Settings extends AppCompatActivity implements OnClickListener {
 
     private ActionBar toolbar;
-    private TextView mTextMessage;
-    private static final String TAG = "MyActivity";
+    Boolean themeColor;
+    int lastClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,41 +33,6 @@ public class Settings extends AppCompatActivity{
 
         toolbar = getSupportActionBar();
         toolbar.setTitle("Settings");
-
-        Button toFonts = (Button)findViewById(R.id.font);
-        Button toColorScheme = (Button)findViewById(R.id.color_scheme_btn);
-
-        toFonts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-
-                intent.setClass(Settings.this, ChangeFont.class);
-
-                Bundle bundle = new Bundle();
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
-
-        toColorScheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-
-                intent.setClass(Settings.this, ColorScheme.class);
-
-                Bundle bundle = new Bundle();
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_setting);
@@ -99,6 +66,39 @@ public class Settings extends AppCompatActivity{
                         return true;
                     }
                 });
+
+
+        Switch mySwitch;
+        mySwitch = findViewById(R.id.dark_mode);
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    themeColor = true;
+                    setDark();
+
+                } else {
+                    themeColor = false;
+                    setDark();
+                }
+            }
+        });
+
+
+        //FONT
+        findViewById(R.id.roboto_small).setOnClickListener(this);
+        findViewById(R.id.roboto_large).setOnClickListener(this);
+        findViewById(R.id.roboto_btn).setOnClickListener(this);
+
+        findViewById(R.id.sans_sarif_btn_small).setOnClickListener(this);
+        findViewById(R.id.sans_sarif_btn_default).setOnClickListener(this);
+        findViewById(R.id.sans_sarif_btn_large).setOnClickListener(this);
+
+        findViewById(R.id.default_small).setOnClickListener(this);
+        findViewById(R.id.default1).setOnClickListener(this);
+        findViewById(R.id.default_large).setOnClickListener(this);
+
     }
 
     public void switchActivity(int activity) {
@@ -118,5 +118,127 @@ public class Settings extends AppCompatActivity{
                 break;
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        lastClick = v.getId();
+        switch (v.getId()) {
+            case R.id.roboto_small:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_RS_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_RS);
+                break;
+            case R.id.roboto_btn:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_RD_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_RD);
+                break;
+            case R.id.roboto_large:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_RL_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_RL);
+                break;
+            case R.id.sans_sarif_btn_small:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_SSS_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_SSS);
+                break;
+            case R.id.sans_sarif_btn_default:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_SSD_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_SSD);
+                break;
+            case R.id.sans_sarif_btn_large:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_SSL_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_SSL);
+                break;
+            case R.id.default_small:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_DS_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_DS);
+                break;
+            case R.id.default1:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_DD_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_DD);
+                break;
+            case R.id.default_large:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_DL_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_DL);
+                break;
+        }
+    }
+
+
+    void setDark(){
+        System.out.println("In set dark " + lastClick);
+        switch (lastClick) {
+            case R.id.roboto_small:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_RS_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_RS);
+                break;
+            case R.id.roboto_btn:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_RD_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_RD);
+                break;
+            case R.id.roboto_large:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_RL_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_RL);
+                break;
+            case R.id.sans_sarif_btn_small:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_SSS_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_SSS);
+                break;
+            case R.id.sans_sarif_btn_default:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_SSD_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_SSD);
+                break;
+            case R.id.sans_sarif_btn_large:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_SSL_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_SSL);
+                break;
+            case R.id.default_small:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_DS_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_DS);
+                break;
+            case R.id.default1:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_DD_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_DD);
+                break;
+            case R.id.default_large:
+                if (themeColor)
+                    Utils.changeToTheme(this, Utils.THEME_DL_D);
+                else
+                    Utils.changeToTheme(this, Utils.THEME_DL);
+                break;
+        }
     }
 }

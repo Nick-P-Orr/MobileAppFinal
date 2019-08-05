@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 
-public class ChangeFont extends AppCompatActivity implements OnClickListener{
+public class ChangeFont extends AppCompatActivity implements OnClickListener {
 
     private TextView mTextMessage;
     private static final String TAG = "MyActivity";
@@ -18,12 +18,8 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
+        Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.font_change);
-
-        Log.v("myApp", "In font change");
 
         findViewById(R.id.roboto_small).setOnClickListener(this);
         findViewById(R.id.roboto_large).setOnClickListener(this);
@@ -36,12 +32,11 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
         findViewById(R.id.default_small).setOnClickListener(this);
         findViewById(R.id.default1).setOnClickListener(this);
         findViewById(R.id.default_large).setOnClickListener(this);
-        Button goback = (Button)findViewById(R.id.goto_Settings);
+        Button saveChanges = findViewById(R.id.goto_Settings);
 
-        goback.setOnClickListener(new View.OnClickListener() {
+        saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("myApp", "Activity2 button is clicked");
                 Intent intent = new Intent();
 
                 intent.setClass(ChangeFont.this, Settings.class);
@@ -54,17 +49,11 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
             }
         });
 
-        Bundle bundle = this.getIntent().getExtras();
-
-
     }
 
     @Override
-    public void onClick(View v)
-    {
-        // TODO Auto-generated method stub
-        switch (v.getId())
-        {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.roboto_small:
                 Utils.changeToTheme(this, Utils.THEME_RS);
                 break;
