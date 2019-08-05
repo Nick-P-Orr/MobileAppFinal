@@ -43,6 +43,10 @@ public class Utils {
         return currentTheme;
     }
 
+    public static void setsTheme(int style){
+        sTheme = style;
+    }
+
     /**
      * Set the theme of the Activity, and restart it by creating a new Activity of the same type.
      */
