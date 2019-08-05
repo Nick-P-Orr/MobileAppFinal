@@ -84,13 +84,13 @@ public class ChangeFont extends AppCompatActivity implements OnClickListener{
                 Utils.changeToTheme(this, Utils.THEME_SSL);
                 break;
             case R.id.default_small:
-                Utils.changeToTheme(this, Utils.THEME_RS);
+                Utils.changeToTheme(this, Utils.THEME_DS);
                 break;
             case R.id.default1:
-                Utils.changeToTheme(this, Utils.THEME_RD);
+                Utils.changeToTheme(this, Utils.THEME_DD);
                 break;
             case R.id.default_large:
-                Utils.changeToTheme(this, Utils.THEME_RL);
+                Utils.changeToTheme(this, Utils.THEME_DL);
                 break;
         }
     }
