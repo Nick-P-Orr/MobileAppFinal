@@ -46,7 +46,7 @@ public class Calendar extends AppCompatActivity {
         toolbar = getSupportActionBar();
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         RadioButton startDate = findViewById(R.id.radioButtonStart);
-        RadioButton endDate = findViewById(R.id.radioButtonEnd);
+        final RadioButton endDate = findViewById(R.id.radioButtonEnd);
 
         if (Utils.getCurrentColorTheme().equals("Dark")) {
             startDate.setTextColor(Color.WHITE);
@@ -58,10 +58,6 @@ public class Calendar extends AppCompatActivity {
             bundle = this.getIntent().getExtras();
             category = bundle.getString("Category");
         } catch (NullPointerException e) {
-        }
-
-        if (toggle == 0) {
-            startDate.setChecked(true);
         }
 
         compactCalendar = findViewById(R.id.compactcalendar_view); // get the reference of CalendarView
@@ -80,10 +76,15 @@ public class Calendar extends AppCompatActivity {
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 // currentDateSelection = firstDayOfNewMonth;
+                compactCalendar.setCurrentDate(firstDayOfNewMonth);
                 if (!category.isEmpty()) {
                     toolbar.setTitle(category + ": " + dateFormatMonth.format(firstDayOfNewMonth));
                 } else
                     toolbar.setTitle("All Notes: " + dateFormatMonth.format(firstDayOfNewMonth));
+                if(endDate.isChecked())
+                    toggle = 1;
+                else
+                    toggle = 0;
                 updateListView(dateFormat.format(firstDayOfNewMonth), toggle);
                 createEvents(dateFormatEvent.format(firstDayOfNewMonth));
             }
@@ -145,6 +146,7 @@ public class Calendar extends AppCompatActivity {
                 endEventsCreated.clear();
                 toggle = 0;
                 updateListView(input, toggle);
+                currentDateSelection = compactCalendar.getFirstDayOfCurrentMonth();
                 createEvents(dateFormatEvent.format(currentDateSelection));
             }
         });
@@ -157,6 +159,7 @@ public class Calendar extends AppCompatActivity {
                 endEventsCreated.clear();
                 toggle = 1;
                 updateListView(input, toggle);
+                currentDateSelection = compactCalendar.getFirstDayOfCurrentMonth();
                 createEvents(dateFormatEvent.format(currentDateSelection));
             }
         });
@@ -245,7 +248,6 @@ public class Calendar extends AppCompatActivity {
         }
 
         while (cursorNotes.moveToNext()) {
-            System.out.println("In movetonext Loop");
             String title = cursorNotes.getString(cursorNotes.getColumnIndex("Title"));
             String EventDate = cursorNotes.getString(cursorNotes.getColumnIndex(SE));
             Date date;
