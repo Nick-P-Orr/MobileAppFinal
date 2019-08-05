@@ -74,7 +74,7 @@ public class AllNotes extends AppCompatActivity {
         updateListView(query);
 
         Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
-        if(Utils.getCurrentColorTheme().equals("Dark")) {
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
             sortingSpinner.setBackgroundResource(R.drawable.spinner_dark);
             sortingSpinner.setPopupBackgroundResource(R.drawable.spinner_dark);
         }

@@ -77,7 +77,7 @@ public class IndividualCategory extends AppCompatActivity {
 
 
         Spinner sortingSpinner = findViewById(R.id.sorting_spinner);
-        if(Utils.getCurrentColorTheme().equals("Dark")) {
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
             sortingSpinner.setBackgroundResource(R.drawable.spinner_dark);
             sortingSpinner.setPopupBackgroundResource(R.drawable.spinner_dark);
         }
@@ -87,7 +87,7 @@ public class IndividualCategory extends AppCompatActivity {
                 String selected = (String) parent.getItemAtPosition(position);
                 int i = 0;
                 if (selected.equals("Title Descending")) {
-                   i = 0;
+                    i = 0;
 
                 } else if (selected.equals("Title Ascending")) {
                     i = 1;
@@ -97,7 +97,7 @@ public class IndividualCategory extends AppCompatActivity {
 
                 } else if (selected.equals("Last Edit Ascending")) {
                     i = 3;
-                } else if (selected.equals("Calendar View")){
+                } else if (selected.equals("Calendar View")) {
                     switchActivity(5);
                 }
                 updateListView(Category, i);
@@ -127,11 +127,11 @@ public class IndividualCategory extends AppCompatActivity {
         // Create Cursor to traverse notes
         Cursor cursorNotes;
 
-        if(i == 0)
+        if (i == 0)
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY Title DESC", new String[]{query});
-        else if(i == 1)
+        else if (i == 1)
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY Title ASC", new String[]{query});
-        else if(i == 2)
+        else if (i == 2)
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY lastedit DESC", new String[]{query});
         else
             cursorNotes = db.rawQuery("SELECT * from Notes WHERE Category = ? ORDER BY lastedit ASC", new String[]{query});

@@ -76,7 +76,7 @@ public class Search extends AppCompatActivity {
 
         // Create search bar onclick  listener and string to hold input
         final EditText searchBar = findViewById(R.id.searchBar);
-        if(Utils.getCurrentColorTheme().equals("Dark")){
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
             searchBar.setHintTextColor(Color.WHITE);
             searchBar.setTextColor(Color.WHITE);
         }

@@ -1,6 +1,7 @@
 package com.example.notely;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -25,6 +26,7 @@ public class Settings extends AppCompatActivity implements OnClickListener {
     private ActionBar toolbar;
     Boolean themeColor;
     int lastClick;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +147,7 @@ public class Settings extends AppCompatActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+        int style = v.getId();
         switch (v.getId()) {
             case R.id.roboto_small:
                 if (themeColor)
@@ -201,6 +204,7 @@ public class Settings extends AppCompatActivity implements OnClickListener {
                     Utils.changeToTheme(this, Utils.THEME_DL);
                 break;
         }
+
     }
 
 

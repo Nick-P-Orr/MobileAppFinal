@@ -140,7 +140,7 @@ public class ListItemAdapter extends BaseAdapter implements ListAdapter {
 
         //Edit and Delete Buttons
         Button deleteButton = view.findViewById(R.id.delete_button);
-        if(Utils.getCurrentColorTheme().equals("Dark"))
+        if (Utils.getCurrentColorTheme().equals("Dark"))
             deleteButton.setBackgroundColor(Color.DKGRAY);
 
         deleteButton.setOnClickListener(new View.OnClickListener() {

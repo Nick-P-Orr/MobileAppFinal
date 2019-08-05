@@ -9,12 +9,13 @@ public class SplashScreen extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 1500;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.splash_screen);
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 Intent mainInt = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(mainInt);
                 finish();

@@ -2,6 +2,7 @@ package com.example.notely;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 public class Utils {
 
@@ -30,7 +31,6 @@ public class Utils {
     public final static int THEME_DD_D = 17;
     public final static int THEME_DL_D = 18;
 
-
     public static int getCurrentTextTheme() {
         return currentTextTheme;
     }
@@ -39,7 +39,7 @@ public class Utils {
         return currentColorTheme;
     }
 
-    public static int getCurrentTheme(){
+    public static int getCurrentTheme() {
         return currentTheme;
     }
 

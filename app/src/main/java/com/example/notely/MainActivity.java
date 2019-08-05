@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         noteID = NoteID.toString();
         Button save = findViewById(R.id.save_note);
 
-        if(Utils.getCurrentColorTheme().equals("Dark")){
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
             noteEditText.setTextColor(Color.WHITE);
             noteEditText.setHintTextColor(Color.WHITE);
             titleEditText.setTextColor(Color.WHITE);
@@ -144,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
         // Open the database. If it doesn't exist, create it.
         SQLiteDatabase db;
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
-
 
 
         // Ensure keyboard doesn't popup on start/end date click
@@ -315,7 +316,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void savePrompt(final int switchcase) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if (Utils.getCurrentColorTheme().equals("Dark")){
+        if (Utils.getCurrentColorTheme().equals("Dark")) {
             builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         }
         builder.setMessage("WARNING! ANY WORK NOT SAVED WILL BE LOST! Save current note?");
@@ -490,12 +490,12 @@ public class MainActivity extends AppCompatActivity {
 
         int one = end_Date.indexOf("/");
         int two = end_Date.lastIndexOf("/");
-        EndMY = end_Date.substring(0,one);
+        EndMY = end_Date.substring(0, one);
         EndMY = EndMY + end_Date.substring(two);
 
         int One = start_date.indexOf("/");
         int Two = start_date.lastIndexOf("/");
-        StartMY = start_date.substring(0,One);
+        StartMY = start_date.substring(0, One);
         StartMY = StartMY + start_date.substring(Two);
 
 
@@ -535,8 +535,8 @@ public class MainActivity extends AppCompatActivity {
             String title = FILE_NAME;
             FILE_NAME = FILE_NAME.replaceAll(" ", "_");
             String category_text = "Test";
-            String start_date = "7/"+ i +"/2019";
-            String end_Date = "8/"+ i +"/2019";
+            String start_date = "7/" + i + "/2019";
+            String end_Date = "8/" + i + "/2019";
             String start_my = "7/2019";
             String end_my = "8/2019";
 
