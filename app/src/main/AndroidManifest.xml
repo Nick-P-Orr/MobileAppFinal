@@ -13,7 +13,6 @@
         <activity android:name=".Categories" />
         <activity android:name=".Search" />
         <activity android:name=".AllNotes" />
-        <activity android:name=".ChangeFont"/>
         <activity android:name=".IndividualCategory" />
         <activity android:name=".Calendar" />
         <activity

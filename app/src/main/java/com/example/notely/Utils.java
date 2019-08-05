@@ -6,7 +6,7 @@ import android.content.Intent;
 public class Utils {
 
     public static int currentTextTheme;
-    public static int currentColorTheme;
+    public static String currentColorTheme;
     private static int sTheme;
 
     public final static int THEME_RS = 0;
@@ -30,12 +30,11 @@ public class Utils {
     public final static int THEME_DL_D = 18;
 
 
-
     public static int getCurrentTextTheme() {
         return currentTextTheme;
     }
 
-    public static int getCurrentColorTheme() {
+    public static String getCurrentColorTheme() {
         return currentColorTheme;
     }
 
@@ -53,11 +52,15 @@ public class Utils {
      */
     public static void onActivityCreateSetTheme(Activity activity) {
 
-        if (sTheme >= 0 && sTheme <= 8)
-            currentTextTheme = sTheme;
+        currentTextTheme = sTheme;
 
-        if (sTheme >= 9 && sTheme <= 10)
-            currentColorTheme = sTheme;
+        if (sTheme >= 0 && sTheme <= 8)
+            currentColorTheme = "Light";
+
+        if (sTheme >= 9 && sTheme <= 18) {
+            currentColorTheme = "Dark";
+            currentTextTheme = currentTextTheme - 9;
+        }
 
         System.out.println(sTheme);
 

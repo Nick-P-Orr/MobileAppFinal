@@ -71,6 +71,14 @@ public class Settings extends AppCompatActivity implements OnClickListener {
         Switch mySwitch;
         mySwitch = findViewById(R.id.dark_mode);
 
+        if(Utils.getCurrentColorTheme().equals("Dark"))
+            themeColor = true;
+        else
+            themeColor = false;
+
+        if(themeColor)
+            mySwitch.setChecked(true);
+
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -122,7 +130,6 @@ public class Settings extends AppCompatActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        lastClick = v.getId();
         switch (v.getId()) {
             case R.id.roboto_small:
                 if (themeColor)
@@ -183,57 +190,57 @@ public class Settings extends AppCompatActivity implements OnClickListener {
 
 
     void setDark(){
-        System.out.println("In set dark " + lastClick);
+        lastClick = Utils.getCurrentTextTheme();
         switch (lastClick) {
-            case R.id.roboto_small:
+            case 0:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_RS_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_RS);
                 break;
-            case R.id.roboto_btn:
+            case 1:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_RD_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_RD);
                 break;
-            case R.id.roboto_large:
+            case 2:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_RL_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_RL);
                 break;
-            case R.id.sans_sarif_btn_small:
+            case 3:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_SSS_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_SSS);
                 break;
-            case R.id.sans_sarif_btn_default:
+            case 4:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_SSD_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_SSD);
                 break;
-            case R.id.sans_sarif_btn_large:
+            case 5:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_SSL_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_SSL);
                 break;
-            case R.id.default_small:
+            case 6:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_DS_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_DS);
                 break;
-            case R.id.default1:
+            case 7:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_DD_D);
                 else
                     Utils.changeToTheme(this, Utils.THEME_DD);
                 break;
-            case R.id.default_large:
+            case 8:
                 if (themeColor)
                     Utils.changeToTheme(this, Utils.THEME_DL_D);
                 else
