@@ -1,4 +1,4 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import quiche.example.notely.R;
 
 import java.util.ArrayList;
 import java.util.List;

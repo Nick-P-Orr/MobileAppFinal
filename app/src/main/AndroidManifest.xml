@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.notely">
+    package="quiche.example.notely"
+    android:versionCode="1"
+    android:versionName="1.0">
+
 
     <application
         android:allowBackup="true"
@@ -9,22 +12,22 @@
         android:roundIcon="@mipmap/ic_notely_teal_round"
         android:supportsRtl="true"
         android:theme="@style/LightTheme">
-        <activity android:name=".Settings"/>
-        <activity android:name=".Categories" />
-        <activity android:name=".Search" />
-        <activity android:name=".AllNotes" />
-        <activity android:name=".IndividualCategory" />
-        <activity android:name=".Calendar" />
-        <activity android:name=".MainActivity" />
+
+        
+        <activity android:name="quiche.example.notely.Settings" />
+        <activity android:name="quiche.example.notely.Categories" />
+        <activity android:name="quiche.example.notely.Search" />
+        <activity android:name="quiche.example.notely.AllNotes" />
+        <activity android:name="quiche.example.notely.IndividualCategory" />
+        <activity android:name="quiche.example.notely.Calendar" />
+        <activity android:name="quiche.example.notely.MainActivity" />
         <activity
-            android:name=".SplashScreen"
+            android:name="quiche.example.notely.SplashScreen"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

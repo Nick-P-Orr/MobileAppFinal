@@ -1,4 +1,4 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
+import quiche.example.notely.R;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 

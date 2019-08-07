@@ -1,8 +1,7 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -10,18 +9,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import quiche.example.notely.R;
 
 public class Settings extends AppCompatActivity implements OnClickListener {
 

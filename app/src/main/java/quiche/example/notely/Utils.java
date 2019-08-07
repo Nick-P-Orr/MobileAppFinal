@@ -1,8 +1,9 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
+import quiche.example.notely.R;
 
 public class Utils {
 

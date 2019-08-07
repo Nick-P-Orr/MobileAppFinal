@@ -1,4 +1,4 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import quiche.example.notely.R;
 
 import java.util.ArrayList;
 import java.util.List;

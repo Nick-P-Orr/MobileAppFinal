@@ -1,4 +1,4 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import quiche.example.notely.R;
 
 import java.util.List;
 

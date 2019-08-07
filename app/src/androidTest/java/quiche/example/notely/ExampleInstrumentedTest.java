@@ -1,4 +1,4 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

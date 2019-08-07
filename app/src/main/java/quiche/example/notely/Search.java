@@ -1,4 +1,4 @@
-package com.example.notely;
+package quiche.example.notely;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import quiche.example.notely.R;
 
 import java.util.ArrayList;
 import java.util.List;

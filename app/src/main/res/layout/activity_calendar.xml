@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".AllNotes">
+        tools:context="quiche.example.notely.AllNotes">
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/nav_view"
